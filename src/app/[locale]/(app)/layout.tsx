@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 import { requireAuth } from "@/server/authz";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
@@ -14,6 +15,9 @@ export default async function AppLayout({
   const { locale } = await params;
   setRequestLocale(locale);
   const ctx = await requireAuth(locale);
+
+  // Clients never see the internal app — send them to their portal.
+  if (ctx.role === "CLIENT") redirect(`/${locale}/portal`);
 
   return (
     <div className="flex min-h-screen">

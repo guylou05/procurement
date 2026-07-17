@@ -79,9 +79,34 @@ async function main() {
   await prisma.project.deleteMany({ where: { organizationId: org.id } });
   await prisma.client.deleteMany({ where: { organizationId: org.id } });
 
+  // ── Client portal user ──
+  const clientUser = await prisma.user.upsert({
+    where: { email: "client@demo.africa" },
+    update: {},
+    create: {
+      email: "client@demo.africa",
+      name: "Groupe Immobilier Atlantique",
+      passwordHash,
+      emailVerified: new Date(),
+      locale: "fr",
+      preference: { create: { locale: "fr" } },
+    },
+  });
+  await prisma.organizationMember.upsert({
+    where: { organizationId_userId: { organizationId: org.id, userId: clientUser.id } },
+    update: { role: "CLIENT" },
+    create: { organizationId: org.id, userId: clientUser.id, role: "CLIENT" },
+  });
+
   // ── Clients ──
   const client1 = await prisma.client.create({
-    data: { organizationId: org.id, name: "Groupe Immobilier Atlantique", company: "GIA", phone: "+237 6 11 11 11 11" },
+    data: {
+      organizationId: org.id,
+      userId: clientUser.id,
+      name: "Groupe Immobilier Atlantique",
+      company: "GIA",
+      phone: "+237 6 11 11 11 11",
+    },
   });
   const client2 = await prisma.client.create({
     data: { organizationId: org.id, name: "Ministère des Travaux Publics", phone: "+237 6 22 22 22 22" },
@@ -212,7 +237,28 @@ async function main() {
     ],
   });
 
-  console.log("Seed complete. Login: owner@demo.africa / Password123!");
+  // ── Invoice + payment (visible in the client portal) ──
+  await prisma.invoice.deleteMany({ where: { organizationId: org.id } });
+  await prisma.invoice.create({
+    data: {
+      organizationId: org.id, clientId: client1.id, projectId: residential.id,
+      number: "INV-2024-001", currency: "XAF", status: "PARTIALLY_PAID",
+      dueDate: new Date(Date.now() + 20 * 864e5),
+      items: {
+        create: [
+          { description: "Acompte fondations", quantity: 1, unitPriceMinor: 15000000, order: 1 },
+          { description: "Gros œuvre — tranche 1", quantity: 1, unitPriceMinor: 10000000, order: 2 },
+        ],
+      },
+      payments: {
+        create: [{ organizationId: org.id, amountMinor: 15000000, currency: "XAF", method: "BANK_TRANSFER" }],
+      },
+    },
+  });
+
+  console.log("Seed complete.");
+  console.log("  Staff login:  owner@demo.africa / Password123!");
+  console.log("  Client login: client@demo.africa / Password123!");
 }
 
 main()

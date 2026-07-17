@@ -19,6 +19,19 @@ export function toMajor(minor: number, currency: string): number {
   return minor / minorUnitFactor(currency);
 }
 
+/** Sum of invoice line items plus tax minus discount, in minor units. */
+export function invoiceTotalMinor(
+  items: { quantity: number; unitPriceMinor: number }[],
+  taxMinor = 0,
+  discountMinor = 0,
+): number {
+  const subtotal = items.reduce(
+    (sum, i) => sum + Math.round(i.quantity * i.unitPriceMinor),
+    0,
+  );
+  return subtotal + taxMinor - discountMinor;
+}
+
 /** Locale-aware currency formatting from stored minor units. */
 export function formatMoney(minor: number, currency: string, locale = "en"): string {
   const value = toMajor(minor, currency);

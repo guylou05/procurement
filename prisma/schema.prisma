@@ -221,6 +221,7 @@ model User {
   auditLogs         AuditLog[]
   passwordResets    PasswordResetToken[]
   verificationTokens VerificationToken[]
+  clientProfile     Client?              @relation("ClientPortalUser")
 }
 
 model Organization {
@@ -414,6 +415,7 @@ model UsageLimit {
 model Client {
   id             String   @id @default(cuid())
   organizationId String
+  userId         String?  @unique // optional portal login linked to this client
   name           String
   company        String?
   email          String?
@@ -426,6 +428,7 @@ model Client {
   deletedAt      DateTime?
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  portalUser   User?        @relation("ClientPortalUser", fields: [userId], references: [id])
   projects     Project[]
   invoices     Invoice[]
 
