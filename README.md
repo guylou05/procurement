@@ -40,11 +40,14 @@ This is a **working foundation plus a vertical slice** of the MVP, not a finishe
 - Invoices & payments (line items, computed totals, record payment with auto status)
 - Client portal (shared project progress, milestones, invoices — strict internal-data
   isolation; CLIENT-role users are redirected here and never see the internal app)
+- Team management + invitations (invite by role, shareable link, accept flow)
+- Settings (org profile, expense approval threshold, per-user language preference)
+- Reports (summary metrics + CSV exports for attendance/expenses/materials)
 - Design system, localized routing, PWA manifest
 
 **Scaffolded (schema + services + navigation present; full UI pending):**
-Material requests, reports, team, settings. These render an honest "module in progress"
-screen — no fake-operational UI. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
+Material requests. This renders an honest "module in progress" screen — no
+fake-operational UI. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
 
 **Documented, not built:** marketplace/RFQ, logistics, mobile-money execution, payroll,
 AI, biometric attendance, native apps, public API — see [`docs/FUTURE.md`](docs/FUTURE.md).
