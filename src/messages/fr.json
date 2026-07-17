@@ -266,6 +266,17 @@
     },
     "empty": "Aucune dépense pour le moment."
   },
+  "client": {
+    "title": "Clients",
+    "new": "Nouveau client",
+    "name": "Nom",
+    "company": "Société",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "whatsapp": "WhatsApp",
+    "projects": "Projets",
+    "empty": "Aucun client pour le moment. Ajoutez des clients pour les lier aux projets et factures."
+  },
   "issue": {
     "title": "Incidents",
     "new": "Signaler un incident",

@@ -266,6 +266,17 @@
     },
     "empty": "No expenses yet."
   },
+  "client": {
+    "title": "Clients",
+    "new": "New client",
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "projects": "Projects",
+    "empty": "No clients yet. Add clients to link them to projects and invoices."
+  },
   "issue": {
     "title": "Issues",
     "new": "Report issue",

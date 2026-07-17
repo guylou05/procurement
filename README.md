@@ -35,10 +35,11 @@ This is a **working foundation plus a vertical slice** of the MVP, not a finishe
 - Expenses (record draft/submit, approval thresholds, approve/reject with audit)
 - Tasks (Kanban board grouped by status, create, advance status)
 - Issues & incidents (report by category/severity, resolve)
+- Clients (list, create; linked from projects and expenses)
 - Design system, localized routing, PWA manifest
 
 **Scaffolded (schema + services + navigation present; full UI pending):**
-Material requests, equipment, clients management, invoices, reports, team, settings.
+Material requests, equipment, invoices, reports, team, settings, and the client portal.
 These render an honest "module in progress" screen — no fake-operational UI.
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
 
