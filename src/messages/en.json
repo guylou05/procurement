@@ -179,6 +179,93 @@
     },
     "empty": "No workers assigned to this project."
   },
+  "worker": {
+    "title": "Workers",
+    "new": "New worker",
+    "fullName": "Full name",
+    "workerId": "Worker ID",
+    "jobTitle": "Job title",
+    "skill": "Skill",
+    "phone": "Phone",
+    "email": "Email",
+    "employmentType": "Employment type",
+    "dailyRate": "Daily rate",
+    "hireDate": "Hire date",
+    "status": "Status",
+    "emergencyContact": "Emergency contact",
+    "types": {
+      "PERMANENT": "Permanent",
+      "TEMPORARY": "Temporary",
+      "CONTRACTOR": "Contractor",
+      "SUBCONTRACTOR": "Subcontractor",
+      "DAILY_LABORER": "Daily laborer"
+    },
+    "statuses": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "SUSPENDED": "Suspended"
+    },
+    "empty": "No workers yet. Add your workforce to track attendance and labor."
+  },
+  "material": {
+    "title": "Materials",
+    "new": "New material",
+    "name": "Name",
+    "sku": "SKU / code",
+    "category": "Category",
+    "unit": "Unit",
+    "supplier": "Supplier",
+    "unitCost": "Unit cost",
+    "quantity": "Quantity",
+    "minQuantity": "Min. quantity",
+    "location": "Storage location",
+    "lowStock": "Low stock",
+    "adjustStock": "Adjust stock",
+    "transactionType": "Transaction",
+    "types": {
+      "PURCHASE": "Purchase",
+      "RECEIVE": "Receive",
+      "ISSUE": "Issue to project",
+      "USE": "Use",
+      "RETURN": "Return",
+      "TRANSFER": "Transfer",
+      "ADJUSTMENT": "Adjustment",
+      "DAMAGE": "Damage",
+      "LOSS": "Loss"
+    },
+    "empty": "No materials yet. Add items to track inventory and low-stock alerts."
+  },
+  "expense": {
+    "title": "Expenses",
+    "new": "New expense",
+    "project": "Project",
+    "category": "Category",
+    "amount": "Amount",
+    "vendor": "Vendor",
+    "date": "Date",
+    "paymentMethod": "Payment method",
+    "description": "Description",
+    "submittedBy": "Submitted by",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectionReason": "Rejection reason",
+    "methods": {
+      "CASH": "Cash",
+      "BANK_TRANSFER": "Bank transfer",
+      "MOBILE_MONEY": "Mobile money",
+      "CARD": "Card",
+      "CHEQUE": "Cheque",
+      "OTHER": "Other"
+    },
+    "statuses": {
+      "DRAFT": "Draft",
+      "SUBMITTED": "Submitted",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "REIMBURSED": "Reimbursed"
+    },
+    "empty": "No expenses yet."
+  },
   "validation": {
     "required": "This field is required",
     "email": "Enter a valid email",

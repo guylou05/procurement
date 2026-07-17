@@ -179,6 +179,93 @@
     },
     "empty": "Aucun ouvrier affecté à ce projet."
   },
+  "worker": {
+    "title": "Ouvriers",
+    "new": "Nouvel ouvrier",
+    "fullName": "Nom complet",
+    "workerId": "Matricule",
+    "jobTitle": "Poste",
+    "skill": "Compétence",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "employmentType": "Type de contrat",
+    "dailyRate": "Taux journalier",
+    "hireDate": "Date d'embauche",
+    "status": "Statut",
+    "emergencyContact": "Contact d'urgence",
+    "types": {
+      "PERMANENT": "Permanent",
+      "TEMPORARY": "Temporaire",
+      "CONTRACTOR": "Prestataire",
+      "SUBCONTRACTOR": "Sous-traitant",
+      "DAILY_LABORER": "Journalier"
+    },
+    "statuses": {
+      "ACTIVE": "Actif",
+      "INACTIVE": "Inactif",
+      "SUSPENDED": "Suspendu"
+    },
+    "empty": "Aucun ouvrier pour le moment. Ajoutez votre main-d'œuvre pour suivre la présence et les coûts."
+  },
+  "material": {
+    "title": "Matériaux",
+    "new": "Nouveau matériau",
+    "name": "Nom",
+    "sku": "Code / SKU",
+    "category": "Catégorie",
+    "unit": "Unité",
+    "supplier": "Fournisseur",
+    "unitCost": "Coût unitaire",
+    "quantity": "Quantité",
+    "minQuantity": "Quantité min.",
+    "location": "Lieu de stockage",
+    "lowStock": "Stock faible",
+    "adjustStock": "Ajuster le stock",
+    "transactionType": "Transaction",
+    "types": {
+      "PURCHASE": "Achat",
+      "RECEIVE": "Réception",
+      "ISSUE": "Sortie vers projet",
+      "USE": "Utilisation",
+      "RETURN": "Retour",
+      "TRANSFER": "Transfert",
+      "ADJUSTMENT": "Ajustement",
+      "DAMAGE": "Dommage",
+      "LOSS": "Perte"
+    },
+    "empty": "Aucun matériau pour le moment. Ajoutez des articles pour suivre le stock et les alertes."
+  },
+  "expense": {
+    "title": "Dépenses",
+    "new": "Nouvelle dépense",
+    "project": "Projet",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "vendor": "Fournisseur",
+    "date": "Date",
+    "paymentMethod": "Mode de paiement",
+    "description": "Description",
+    "submittedBy": "Soumis par",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "rejectionReason": "Motif du rejet",
+    "methods": {
+      "CASH": "Espèces",
+      "BANK_TRANSFER": "Virement bancaire",
+      "MOBILE_MONEY": "Mobile money",
+      "CARD": "Carte",
+      "CHEQUE": "Chèque",
+      "OTHER": "Autre"
+    },
+    "statuses": {
+      "DRAFT": "Brouillon",
+      "SUBMITTED": "Soumis",
+      "APPROVED": "Approuvé",
+      "REJECTED": "Rejeté",
+      "REIMBURSED": "Remboursé"
+    },
+    "empty": "Aucune dépense pour le moment."
+  },
   "validation": {
     "required": "Ce champ est requis",
     "email": "Saisissez un e-mail valide",

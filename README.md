@@ -30,12 +30,15 @@ This is a **working foundation plus a vertical slice** of the MVP, not a finishe
 - Projects (list, create, detail) + clients
 - Daily site reports (list, create draft/submit) + PM review action
 - Attendance (fast per-worker capture with audited corrections)
+- Workers (list, create, detail with attendance history)
+- Materials & inventory (list with low-stock flags, create, stock transactions)
+- Expenses (record draft/submit, approval thresholds, approve/reject with audit)
 - Design system, localized routing, PWA manifest
 
 **Scaffolded (schema + services + navigation present; full UI pending):**
-Tasks, workers, materials & requests, expenses, equipment, issues, clients management,
-invoices, reports, team, settings. These render an honest "module in progress" screen —
-no fake-operational UI. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
+Tasks, material requests, equipment, issues, clients management, invoices, reports, team,
+settings. These render an honest "module in progress" screen — no fake-operational UI.
+See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
 
 **Documented, not built:** marketplace/RFQ, logistics, mobile-money execution, payroll,
 AI, biometric attendance, native apps, public API — see [`docs/FUTURE.md`](docs/FUTURE.md).
