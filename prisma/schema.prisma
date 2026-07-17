@@ -1,0 +1,1112 @@
+// BuildFlow Africa — Prisma schema
+// Multi-tenant field operations SaaS. Every business record carries organizationId.
+// See docs/DATABASE_MODEL.md for the narrative model.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── Enums ───────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+  ADMIN
+  PROJECT_MANAGER
+  SUPERVISOR
+  WORKER
+  ACCOUNTANT
+  CLIENT
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+enum EmploymentType {
+  PERMANENT
+  TEMPORARY
+  CONTRACTOR
+  SUBCONTRACTOR
+  DAILY_LABORER
+}
+
+enum WorkerStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ProjectStatus {
+  DRAFT
+  PLANNED
+  ACTIVE
+  ON_HOLD
+  DELAYED
+  COMPLETED
+  CANCELLED
+}
+
+enum ProjectPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+  OVERTIME
+}
+
+enum DailyReportStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  CHANGES_REQUESTED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  BLOCKED
+  AWAITING_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MaterialTxnType {
+  PURCHASE
+  RECEIVE
+  ISSUE
+  USE
+  RETURN
+  TRANSFER
+  ADJUSTMENT
+  DAMAGE
+  LOSS
+}
+
+enum MaterialRequestStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  ORDERED
+  PARTIALLY_RECEIVED
+  RECEIVED
+  CANCELLED
+}
+
+enum ExpenseStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  REIMBURSED
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  MOBILE_MONEY
+  CARD
+  CHEQUE
+  OTHER
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  ASSIGNED
+  IN_USE
+  UNDER_MAINTENANCE
+  DAMAGED
+  LOST
+  RETIRED
+}
+
+enum IssueSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum NotificationType {
+  USER_INVITED
+  PROJECT_ASSIGNED
+  TASK_ASSIGNED
+  TASK_OVERDUE
+  DAILY_REPORT_SUBMITTED
+  DAILY_REPORT_REJECTED
+  EXPENSE_SUBMITTED
+  EXPENSE_APPROVED
+  EXPENSE_REJECTED
+  ISSUE_ASSIGNED
+  CRITICAL_ISSUE_CREATED
+  MATERIAL_REQUEST_SUBMITTED
+  MATERIAL_REQUEST_APPROVED
+  EQUIPMENT_MAINTENANCE_DUE
+  INVOICE_OVERDUE
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+}
+
+// ─────────────────────── Identity & tenancy ───────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  emailVerified DateTime?
+  image         String?
+  locale        String    @default("en")
+  isSuperAdmin  Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  memberships       OrganizationMember[]
+  preference        UserPreference?
+  createdProjects   Project[]            @relation("ProjectCreatedBy")
+  managedProjects   Project[]            @relation("ProjectManager")
+  supervisedProjects Project[]           @relation("ProjectSupervisor")
+  projectMembers    ProjectMember[]
+  submittedReports  DailyReport[]        @relation("ReportSupervisor")
+  reviewedReports   DailyReport[]        @relation("ReportReviewer")
+  assignedTasks     Task[]               @relation("TaskAssignee")
+  reportedIssues    Issue[]              @relation("IssueReporter")
+  assignedIssues    Issue[]              @relation("IssueAssignee")
+  notifications     Notification[]
+  auditLogs         AuditLog[]
+  passwordResets    PasswordResetToken[]
+  verificationTokens VerificationToken[]
+  clientProfile     Client?              @relation("ClientPortalUser")
+}
+
+model Organization {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  country      String // ISO-ish code, see src/config/countries.ts
+  currency     String // ISO-4217, e.g. XAF, XOF
+  timezone     String   @default("Africa/Douala")
+  defaultLocale String  @default("en")
+  industry     String?
+  companySize  String?
+  phone        String?
+  email        String?
+  address      String?
+  logoUrl      String?
+  brandColor   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  members        OrganizationMember[]
+  invitations    Invitation[]
+  branches       Branch[]
+  settings       OrganizationSetting?
+  subscription   Subscription?
+  usageLimits    UsageLimit[]
+  clients        Client[]
+  projects       Project[]
+  workers        Worker[]
+  attendance     AttendanceRecord[]
+  dailyReports   DailyReport[]
+  tasks          Task[]
+  materials      Material[]
+  materialCategories MaterialCategory[]
+  materialRequests MaterialRequest[]
+  materialTransactions MaterialTransaction[]
+  expenses       Expense[]
+  expenseCategories ExpenseCategory[]
+  equipment      Equipment[]
+  issues         Issue[]
+  invoices       Invoice[]
+  payments       Payment[]
+  notifications  Notification[]
+  auditLogs      AuditLog[]
+  fileAttachments FileAttachment[]
+
+  @@index([slug])
+}
+
+model OrganizationMember {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  role           Role     @default(WORKER)
+  branchId       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id])
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model Invitation {
+  id             String           @id @default(cuid())
+  organizationId String
+  email          String
+  role           Role             @default(WORKER)
+  token          String           @unique
+  status         InvitationStatus @default(PENDING)
+  expiresAt      DateTime
+  createdAt      DateTime         @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+}
+
+model Branch {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  city           String?
+  country        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members      OrganizationMember[]
+
+  @@index([organizationId])
+}
+
+model UserPreference {
+  id       String  @id @default(cuid())
+  userId   String  @unique
+  locale   String  @default("en")
+  theme    String  @default("system")
+  emailNotifications Boolean @default(true)
+  inAppNotifications Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OrganizationSetting {
+  id                     String  @id @default(cuid())
+  organizationId         String  @unique
+  expenseApprovalThreshold Int   @default(0) // minor units; above requires approval
+  requireReportApproval  Boolean @default(true)
+  featureFlags           Json?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────── Auth helper tokens ───────────────────────
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─────────────────────── Billing (not activated in MVP) ───────────────────────
+
+model Plan {
+  id            String   @id @default(cuid())
+  code          String   @unique // starter|growth|business|enterprise
+  name          String
+  maxUsers      Int?
+  maxProjects   Int?
+  priceMinor    Int      @default(0)
+  currency      String   @default("USD")
+  features      Json?
+  createdAt     DateTime @default(now())
+
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id             String             @id @default(cuid())
+  organizationId String             @unique
+  planId         String
+  status         SubscriptionStatus @default(TRIALING)
+  currentPeriodEnd DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan         Plan         @relation(fields: [planId], references: [id])
+}
+
+model UsageLimit {
+  id             String @id @default(cuid())
+  organizationId String
+  metric         String // e.g. active_projects, members
+  used           Int    @default(0)
+  limit          Int?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, metric])
+  @@index([organizationId])
+}
+
+// ─────────────────────── Clients ───────────────────────
+
+model Client {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String?  @unique // optional portal login linked to this client
+  name           String
+  company        String?
+  email          String?
+  phone          String?
+  whatsapp       String?
+  billingAddress String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  portalUser   User?        @relation("ClientPortalUser", fields: [userId], references: [id])
+  projects     Project[]
+  invoices     Invoice[]
+
+  @@index([organizationId])
+}
+
+// ─────────────────────── Projects ───────────────────────
+
+model Project {
+  id                   String          @id @default(cuid())
+  organizationId       String
+  name                 String
+  code                 String
+  clientId             String?
+  description          String?
+  address              String?
+  latitude             Float?
+  longitude            Float?
+  city                 String?
+  startDate            DateTime?
+  expectedEndDate      DateTime?
+  actualEndDate        DateTime?
+  status               ProjectStatus   @default(DRAFT)
+  priority             ProjectPriority @default(MEDIUM)
+  projectManagerId     String?
+  supervisorId         String?
+  budgetMinor          Int             @default(0)
+  contractValueMinor   Int             @default(0)
+  currency             String?
+  completionPercentage Int             @default(0)
+  projectType          String?
+  createdById          String?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  deletedAt            DateTime?
+
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client         Client?          @relation(fields: [clientId], references: [id])
+  projectManager User?            @relation("ProjectManager", fields: [projectManagerId], references: [id])
+  supervisor     User?            @relation("ProjectSupervisor", fields: [supervisorId], references: [id])
+  createdBy      User?            @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  members        ProjectMember[]
+  milestones     ProjectMilestone[]
+  documents      ProjectDocument[]
+  dailyReports   DailyReport[]
+  attendance     AttendanceRecord[]
+  tasks          Task[]
+  expenses       Expense[]
+  issues         Issue[]
+  materialTransactions MaterialTransaction[]
+  materialRequests MaterialRequest[]
+  equipmentAssignments EquipmentAssignment[]
+  invoices       Invoice[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId, status])
+  @@index([clientId])
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  userId    String
+  role      String? // free-form project role
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+}
+
+model ProjectMilestone {
+  id          String    @id @default(cuid())
+  projectId   String
+  name        String
+  description String?
+  dueDate     DateTime?
+  completedAt DateTime?
+  completion  Int       @default(0)
+  order       Int       @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model ProjectDocument {
+  id           String   @id @default(cuid())
+  projectId    String
+  name         String
+  attachmentId String
+  createdAt    DateTime @default(now())
+
+  project    Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  attachment FileAttachment @relation(fields: [attachmentId], references: [id])
+
+  @@index([projectId])
+}
+
+// ─────────────────────── Workforce ───────────────────────
+
+model Worker {
+  id             String         @id @default(cuid())
+  organizationId String
+  userId         String? // optional: some workers have no login
+  workerId       String // human-facing id, unique per org
+  fullName       String
+  photoUrl       String?
+  phone          String?
+  email          String?
+  jobTitle       String?
+  skill          String?
+  employmentType EmploymentType @default(PERMANENT)
+  dailyRateMinor Int?
+  hourlyRateMinor Int?
+  currency       String?
+  hireDate       DateTime?
+  status         WorkerStatus   @default(ACTIVE)
+  emergencyContact String?
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documents      WorkerDocument[]
+  certifications WorkerCertification[]
+  attendance     AttendanceRecord[]
+
+  @@unique([organizationId, workerId])
+  @@index([organizationId, status])
+}
+
+model WorkerDocument {
+  id           String   @id @default(cuid())
+  workerId     String
+  name         String
+  attachmentId String
+  createdAt    DateTime @default(now())
+
+  worker     Worker         @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  attachment FileAttachment @relation(fields: [attachmentId], references: [id])
+
+  @@index([workerId])
+}
+
+model WorkerCertification {
+  id        String    @id @default(cuid())
+  workerId  String
+  name      String
+  issuedAt  DateTime?
+  expiresAt DateTime?
+
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@index([workerId])
+}
+
+model AttendanceRecord {
+  id             String           @id @default(cuid())
+  organizationId String
+  projectId      String
+  workerId       String
+  date           DateTime
+  status         AttendanceStatus @default(PRESENT)
+  checkInAt      DateTime?
+  checkOutAt     DateTime?
+  latitude       Float?
+  longitude      Float?
+  photoUrl       String?
+  overtimeMinutes Int             @default(0)
+  breakMinutes   Int             @default(0)
+  note           String?
+  recordedById   String?
+  correctedById  String?
+  correctedAt    DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  worker       Worker       @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, workerId, date])
+  @@index([organizationId, date])
+  @@index([projectId, date])
+}
+
+// ─────────────────────── Daily reports ───────────────────────
+
+model DailyReport {
+  id                 String            @id @default(cuid())
+  organizationId     String
+  projectId          String
+  date               DateTime
+  supervisorId       String?
+  weather            String?
+  workersPresent     Int               @default(0)
+  subcontractorsPresent Int            @default(0)
+  workCompleted      String?
+  workPlanned        String?
+  materialsReceived  String?
+  materialsUsed      String?
+  equipmentUsed      String?
+  delays             String?
+  safetyIncidents    String?
+  blockers           String?
+  visitorNotes       String?
+  additionalNotes    String?
+  signature          String?
+  status             DailyReportStatus @default(DRAFT)
+  submittedAt        DateTime?
+  reviewedById       String?
+  reviewedAt         DateTime?
+  reviewNote         String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  supervisor   User?               @relation("ReportSupervisor", fields: [supervisorId], references: [id])
+  reviewer     User?               @relation("ReportReviewer", fields: [reviewedById], references: [id])
+  photos       DailyReportPhoto[]
+  comments     DailyReportComment[]
+
+  @@index([organizationId, date])
+  @@index([projectId, date])
+  @@index([status])
+}
+
+model DailyReportPhoto {
+  id           String   @id @default(cuid())
+  reportId     String
+  attachmentId String
+  caption      String?
+  createdAt    DateTime @default(now())
+
+  report     DailyReport    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  attachment FileAttachment @relation(fields: [attachmentId], references: [id])
+
+  @@index([reportId])
+}
+
+model DailyReportComment {
+  id        String   @id @default(cuid())
+  reportId  String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+
+  report DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+}
+
+// ─────────────────────── Tasks ───────────────────────
+
+model Task {
+  id             String       @id @default(cuid())
+  organizationId String
+  projectId      String
+  title          String
+  description    String?
+  assigneeId     String?
+  priority       TaskPriority @default(MEDIUM)
+  status         TaskStatus   @default(TODO)
+  startDate      DateTime?
+  dueDate        DateTime?
+  requiresApproval Boolean    @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee     User?              @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  checklist    TaskChecklistItem[]
+  comments     TaskComment[]
+
+  @@index([organizationId, status])
+  @@index([projectId])
+  @@index([assigneeId])
+}
+
+model TaskChecklistItem {
+  id     String  @id @default(cuid())
+  taskId String
+  label  String
+  done   Boolean @default(false)
+  order  Int     @default(0)
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  taskId    String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+// ─────────────────────── Materials ───────────────────────
+
+model MaterialCategory {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  materials    Material[]
+
+  @@index([organizationId])
+}
+
+model Material {
+  id             String   @id @default(cuid())
+  organizationId String
+  categoryId     String?
+  name           String
+  sku            String?
+  unit           String   @default("unit")
+  supplier       String?
+  unitCostMinor  Int      @default(0)
+  currency       String?
+  quantity       Float    @default(0)
+  minQuantity    Float    @default(0)
+  location       String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  category     MaterialCategory?     @relation(fields: [categoryId], references: [id])
+  transactions MaterialTransaction[]
+
+  @@index([organizationId])
+}
+
+model MaterialTransaction {
+  id             String          @id @default(cuid())
+  organizationId String
+  materialId     String
+  projectId      String?
+  type           MaterialTxnType
+  quantity       Float
+  unit           String
+  reason         String?
+  attachmentId   String?
+  note           String?
+  userId         String?
+  createdAt      DateTime        @default(now())
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  material     Material        @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  project      Project?        @relation(fields: [projectId], references: [id])
+  attachment   FileAttachment? @relation(fields: [attachmentId], references: [id])
+
+  @@index([organizationId])
+  @@index([materialId])
+}
+
+model MaterialRequest {
+  id             String                @id @default(cuid())
+  organizationId String
+  projectId      String?
+  requestedById  String?
+  status         MaterialRequestStatus @default(DRAFT)
+  note           String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project?              @relation(fields: [projectId], references: [id])
+  items        MaterialRequestItem[]
+
+  @@index([organizationId, status])
+}
+
+model MaterialRequestItem {
+  id        String @id @default(cuid())
+  requestId String
+  name      String
+  quantity  Float
+  unit      String @default("unit")
+
+  request MaterialRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+}
+
+// ─────────────────────── Expenses ───────────────────────
+
+model ExpenseCategory {
+  id             String @id @default(cuid())
+  organizationId String
+  name           String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  expenses     Expense[]
+
+  @@index([organizationId])
+}
+
+model Expense {
+  id             String        @id @default(cuid())
+  organizationId String
+  projectId      String?
+  categoryId     String?
+  amountMinor    Int
+  currency       String
+  vendor         String?
+  date           DateTime
+  paymentMethod  PaymentMethod @default(CASH)
+  description    String?
+  receiptUrl     String?
+  submittedById  String?
+  status         ExpenseStatus @default(DRAFT)
+  approvedById   String?
+  approvedAt     DateTime?
+  rejectionReason String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project?         @relation(fields: [projectId], references: [id])
+  category     ExpenseCategory? @relation(fields: [categoryId], references: [id])
+
+  @@index([organizationId, status])
+  @@index([projectId])
+}
+
+// ─────────────────────── Equipment ───────────────────────
+
+model Equipment {
+  id             String          @id @default(cuid())
+  organizationId String
+  name           String
+  assetId        String
+  category       String?
+  serialNumber   String?
+  purchaseDate   DateTime?
+  purchaseCostMinor Int          @default(0)
+  currency       String?
+  location       String?
+  condition      String?
+  status         EquipmentStatus @default(AVAILABLE)
+  maintenanceSchedule String?
+  lastMaintenanceAt DateTime?
+  nextMaintenanceAt DateTime?
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+
+  organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignments  EquipmentAssignment[]
+  inspections  EquipmentInspection[]
+  maintenance  EquipmentMaintenance[]
+  fuelLogs     EquipmentFuelLog[]
+
+  @@unique([organizationId, assetId])
+  @@index([organizationId, status])
+}
+
+model EquipmentAssignment {
+  id          String    @id @default(cuid())
+  equipmentId String
+  projectId   String?
+  workerName  String?
+  checkedOutAt DateTime @default(now())
+  checkedInAt DateTime?
+  note        String?
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  project   Project?  @relation(fields: [projectId], references: [id])
+
+  @@index([equipmentId])
+}
+
+model EquipmentInspection {
+  id          String   @id @default(cuid())
+  equipmentId String
+  inspectedAt DateTime @default(now())
+  result      String?
+  note        String?
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@index([equipmentId])
+}
+
+model EquipmentMaintenance {
+  id          String   @id @default(cuid())
+  equipmentId String
+  performedAt DateTime @default(now())
+  description String?
+  costMinor   Int      @default(0)
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@index([equipmentId])
+}
+
+model EquipmentFuelLog {
+  id          String   @id @default(cuid())
+  equipmentId String
+  loggedAt    DateTime @default(now())
+  liters      Float
+  costMinor   Int      @default(0)
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@index([equipmentId])
+}
+
+// ─────────────────────── Issues ───────────────────────
+
+model Issue {
+  id             String        @id @default(cuid())
+  organizationId String
+  projectId      String
+  category       String
+  severity       IssueSeverity @default(MEDIUM)
+  status         IssueStatus   @default(OPEN)
+  description    String
+  reportedById   String?
+  assignedToId   String?
+  dueDate        DateTime?
+  resolution     String?
+  resolvedAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reportedBy   User?          @relation("IssueReporter", fields: [reportedById], references: [id])
+  assignedTo   User?          @relation("IssueAssignee", fields: [assignedToId], references: [id])
+  comments     IssueComment[]
+
+  @@index([organizationId, status])
+  @@index([projectId])
+}
+
+model IssueComment {
+  id        String   @id @default(cuid())
+  issueId   String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([issueId])
+}
+
+// ─────────────────────── Invoices & payments ───────────────────────
+
+model Invoice {
+  id             String        @id @default(cuid())
+  organizationId String
+  clientId       String?
+  projectId      String?
+  number         String
+  issueDate      DateTime      @default(now())
+  dueDate        DateTime?
+  taxMinor       Int           @default(0)
+  discountMinor  Int           @default(0)
+  currency       String
+  notes          String?
+  status         InvoiceStatus @default(DRAFT)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client?       @relation(fields: [clientId], references: [id])
+  project      Project?      @relation(fields: [projectId], references: [id])
+  items        InvoiceItem[]
+  payments     Payment[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, status])
+}
+
+model InvoiceItem {
+  id          String @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Float  @default(1)
+  unitPriceMinor Int
+  order       Int    @default(0)
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  organizationId String
+  invoiceId      String?
+  amountMinor    Int
+  currency       String
+  method         PaymentMethod @default(CASH)
+  reference      String?
+  paidAt         DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoice      Invoice?     @relation(fields: [invoiceId], references: [id])
+
+  @@index([organizationId])
+  @@index([invoiceId])
+}
+
+// ─────────────────────── Platform cross-cutting ───────────────────────
+
+model Notification {
+  id             String           @id @default(cuid())
+  organizationId String
+  userId         String
+  type           NotificationType
+  title          String
+  body           String?
+  data           Json?
+  readAt         DateTime?
+  createdAt      DateTime         @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([organizationId])
+}
+
+model FileAttachment {
+  id             String   @id @default(cuid())
+  organizationId String
+  key            String // storage object key
+  fileName       String
+  mimeType       String
+  sizeBytes      Int
+  uploadedById   String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  projectDocuments ProjectDocument[]
+  workerDocuments  WorkerDocument[]
+  reportPhotos     DailyReportPhoto[]
+  materialTransactions MaterialTransaction[]
+
+  @@index([organizationId])
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String?
+  action         String
+  recordType     String
+  recordId       String?
+  previousValue  Json?
+  newValue       Json?
+  ipAddress      String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+
+  @@index([organizationId, createdAt])
+  @@index([recordType, recordId])
+}

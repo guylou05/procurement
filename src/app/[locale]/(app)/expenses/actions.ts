@@ -1,0 +1,59 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { requireAuth, requirePermission } from "@/server/authz";
+import { createExpense, decideExpense } from "@/server/services/expense";
+
+const createSchema = z.object({
+  projectId: z.string().optional(),
+  amount: z.coerce.number().positive(),
+  vendor: z.string().optional(),
+  date: z.string().min(1),
+  paymentMethod: z.enum(["CASH", "BANK_TRANSFER", "MOBILE_MONEY", "CARD", "CHEQUE", "OTHER"]),
+  description: z.string().optional(),
+  intent: z.enum(["draft", "submit"]).default("submit"),
+});
+
+export async function createExpenseAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "expense:record");
+
+  const parsed = createSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) redirect(`/${locale}/expenses/new?error=validation`);
+
+  await createExpense(ctx, {
+    projectId: parsed.data.projectId || undefined,
+    amount: parsed.data.amount,
+    vendor: parsed.data.vendor,
+    date: new Date(parsed.data.date),
+    paymentMethod: parsed.data.paymentMethod,
+    description: parsed.data.description,
+    submit: parsed.data.intent === "submit",
+  });
+
+  revalidatePath(`/${locale}/expenses`);
+  redirect(`/${locale}/expenses`);
+}
+
+const decideSchema = z.object({
+  id: z.string().min(1),
+  approve: z.enum(["true", "false"]),
+  rejectionReason: z.string().optional(),
+});
+
+export async function decideExpenseAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "expense:approve");
+
+  const parsed = decideSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) redirect(`/${locale}/expenses?error=validation`);
+
+  await decideExpense(ctx, parsed.data.id, {
+    approve: parsed.data.approve === "true",
+    rejectionReason: parsed.data.rejectionReason,
+  });
+
+  revalidatePath(`/${locale}/expenses`);
+}

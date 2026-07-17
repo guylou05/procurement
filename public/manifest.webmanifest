@@ -1,0 +1,13 @@
+{
+  "name": "BuildFlow Africa",
+  "short_name": "BuildFlow",
+  "description": "Field operations for African builders",
+  "start_url": "/en/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e8790f",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
