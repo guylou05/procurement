@@ -43,11 +43,14 @@ This is a **working foundation plus a vertical slice** of the MVP, not a finishe
 - Team management + invitations (invite by role, shareable link, accept flow)
 - Settings (org profile, expense approval threshold, per-user language preference)
 - Reports (summary metrics + CSV exports for attendance/expenses/materials)
+- Material requests (item lines, submit → approve/reject workflow)
 - Design system, localized routing, PWA manifest
 
-**Scaffolded (schema + services + navigation present; full UI pending):**
-Material requests. This renders an honest "module in progress" screen — no
-fake-operational UI. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the build order.
+Every module in the MVP scope is now implemented end-to-end (schema → service →
+authorization → validation → UI → translations). See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Deferred/future features (marketplace, logistics, mobile-money execution, payroll, AI,
+native apps, public API) remain documented with hook points in
+[`docs/FUTURE.md`](docs/FUTURE.md).
 
 **Documented, not built:** marketplace/RFQ, logistics, mobile-money execution, payroll,
 AI, biometric attendance, native apps, public API — see [`docs/FUTURE.md`](docs/FUTURE.md).

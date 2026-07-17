@@ -280,6 +280,22 @@
     "location": "Lieu de stockage",
     "lowStock": "Stock faible",
     "adjustStock": "Ajuster le stock",
+    "requests": "Demandes de matériaux",
+    "newRequest": "Nouvelle demande",
+    "requestItems": "Articles demandés",
+    "note": "Note",
+    "addItem": "Ajouter un article",
+    "requestStatuses": {
+      "DRAFT": "Brouillon",
+      "SUBMITTED": "Soumise",
+      "APPROVED": "Approuvée",
+      "REJECTED": "Rejetée",
+      "ORDERED": "Commandée",
+      "PARTIALLY_RECEIVED": "Partiellement reçue",
+      "RECEIVED": "Reçue",
+      "CANCELLED": "Annulée"
+    },
+    "requestsEmpty": "Aucune demande de matériaux pour le moment.",
     "transactionType": "Transaction",
     "types": {
       "PURCHASE": "Achat",

@@ -24,14 +24,19 @@ export default async function MaterialsPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
-        {can(ctx, "material:manage") ? (
-          <Button asChild>
-            <Link href="/materials/new">
-              <Plus className="size-4" />
-              {t("new")}
-            </Link>
+        <div className="flex gap-2">
+          <Button asChild variant="outline">
+            <Link href="/materials/requests">{t("requests")}</Link>
           </Button>
-        ) : null}
+          {can(ctx, "material:manage") ? (
+            <Button asChild>
+              <Link href="/materials/new">
+                <Plus className="size-4" />
+                {t("new")}
+              </Link>
+            </Button>
+          ) : null}
+        </div>
       </div>
 
       {materials.length === 0 ? (

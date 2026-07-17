@@ -280,6 +280,22 @@
     "location": "Storage location",
     "lowStock": "Low stock",
     "adjustStock": "Adjust stock",
+    "requests": "Material requests",
+    "newRequest": "New request",
+    "requestItems": "Requested items",
+    "note": "Note",
+    "addItem": "Add item",
+    "requestStatuses": {
+      "DRAFT": "Draft",
+      "SUBMITTED": "Submitted",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "ORDERED": "Ordered",
+      "PARTIALLY_RECEIVED": "Partially received",
+      "RECEIVED": "Received",
+      "CANCELLED": "Cancelled"
+    },
+    "requestsEmpty": "No material requests yet.",
     "transactionType": "Transaction",
     "types": {
       "PURCHASE": "Purchase",
