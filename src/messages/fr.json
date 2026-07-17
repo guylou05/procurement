@@ -1,0 +1,188 @@
+{
+  "common": {
+    "brandTagline": "Gestion de chantier pour les bâtisseurs africains",
+    "actions": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "submit": "Soumettre",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "back": "Retour",
+      "next": "Suivant",
+      "search": "Rechercher",
+      "filter": "Filtrer",
+      "export": "Exporter",
+      "viewAll": "Tout voir",
+      "saveDraft": "Enregistrer le brouillon"
+    },
+    "states": {
+      "loading": "Chargement…",
+      "empty": "Rien pour le moment",
+      "error": "Une erreur est survenue",
+      "offline": "Vous êtes hors ligne. Les modifications sont enregistrées localement.",
+      "noResults": "Aucun résultat"
+    },
+    "language": "Langue"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "projects": "Projets",
+    "dailyReports": "Rapports journaliers",
+    "tasks": "Tâches",
+    "attendance": "Présence",
+    "workers": "Ouvriers",
+    "materials": "Matériaux",
+    "expenses": "Dépenses",
+    "equipment": "Équipements",
+    "issues": "Incidents",
+    "clients": "Clients",
+    "invoices": "Factures",
+    "reports": "Rapports",
+    "team": "Équipe",
+    "settings": "Paramètres",
+    "mobile": {
+      "home": "Accueil",
+      "projects": "Projets",
+      "checkIn": "Pointer",
+      "report": "Rapport",
+      "more": "Plus"
+    },
+    "signOut": "Se déconnecter"
+  },
+  "landing": {
+    "heroTitle": "Gérez chaque chantier depuis votre téléphone",
+    "heroSubtitle": "Projets, présence, rapports journaliers, matériaux et dépenses — conçu pour les équipes de construction africaines qui travaillent aujourd'hui sur WhatsApp, papier et Excel.",
+    "getStarted": "Commencer",
+    "signIn": "Se connecter",
+    "features": {
+      "mobile": "Mobile d'abord, fonctionne sur connexions lentes",
+      "bilingual": "Anglais et français par défaut",
+      "multitenant": "Sécurisé, multi-entreprise par conception"
+    }
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "register": "Créer un compte",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "name": "Nom complet",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signInCta": "Se connecter",
+    "registerCta": "Créer un compte",
+    "invalidCredentials": "E-mail ou mot de passe invalide",
+    "registerSuccess": "Compte créé. Vous pouvez vous connecter."
+  },
+  "onboarding": {
+    "title": "Configurez votre entreprise",
+    "subtitle": "Ceci crée votre organisation. Vous pourrez inviter votre équipe ensuite.",
+    "businessName": "Nom de l'entreprise",
+    "country": "Pays",
+    "language": "Langue par défaut",
+    "currency": "Devise",
+    "timezone": "Fuseau horaire",
+    "industry": "Secteur",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "create": "Créer l'organisation",
+    "created": "Organisation créée"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bon retour",
+    "activeProjects": "Projets actifs",
+    "workersOnSite": "Ouvriers sur site aujourd'hui",
+    "pendingReports": "Rapports journaliers en attente",
+    "openIssues": "Incidents ouverts",
+    "pendingExpenses": "Dépenses à approuver",
+    "budgetVsActual": "Budget vs réel",
+    "recentActivity": "Activité récente",
+    "projectsBehind": "Projets en retard"
+  },
+  "project": {
+    "title": "Projets",
+    "new": "Nouveau projet",
+    "name": "Nom du projet",
+    "code": "Code du projet",
+    "client": "Client",
+    "description": "Description",
+    "address": "Adresse",
+    "city": "Ville",
+    "startDate": "Date de début",
+    "endDate": "Fin prévue",
+    "status": "Statut",
+    "priority": "Priorité",
+    "budget": "Budget",
+    "manager": "Chef de projet",
+    "supervisor": "Chef de chantier",
+    "completion": "Avancement",
+    "statuses": {
+      "DRAFT": "Brouillon",
+      "PLANNED": "Planifié",
+      "ACTIVE": "Actif",
+      "ON_HOLD": "En pause",
+      "DELAYED": "En retard",
+      "COMPLETED": "Terminé",
+      "CANCELLED": "Annulé"
+    },
+    "priorities": {
+      "LOW": "Basse",
+      "MEDIUM": "Moyenne",
+      "HIGH": "Haute",
+      "URGENT": "Urgente"
+    },
+    "empty": "Aucun projet pour le moment. Créez votre premier projet pour commencer."
+  },
+  "dailyReport": {
+    "title": "Rapport journalier de chantier",
+    "new": "Nouveau rapport journalier",
+    "date": "Date",
+    "project": "Projet",
+    "weather": "Météo",
+    "workersPresent": "Ouvriers présents",
+    "subcontractorsPresent": "Sous-traitants présents",
+    "workCompleted": "Travaux réalisés",
+    "workPlanned": "Travaux prévus",
+    "materialsUsed": "Matériaux utilisés",
+    "delays": "Retards",
+    "safetyIncidents": "Incidents de sécurité",
+    "blockers": "Problèmes ou blocages",
+    "notes": "Notes complémentaires",
+    "statuses": {
+      "DRAFT": "Brouillon",
+      "SUBMITTED": "Soumis",
+      "APPROVED": "Approuvé",
+      "REJECTED": "Rejeté",
+      "CHANGES_REQUESTED": "Modifications demandées"
+    },
+    "empty": "Aucun rapport journalier pour le moment."
+  },
+  "attendance": {
+    "title": "Présence",
+    "selectProject": "Sélectionner un projet",
+    "present": "Présent",
+    "absent": "Absent",
+    "late": "En retard",
+    "checkIn": "Pointer l'arrivée",
+    "checkOut": "Pointer le départ",
+    "save": "Enregistrer la présence",
+    "statuses": {
+      "PRESENT": "Présent",
+      "ABSENT": "Absent",
+      "LATE": "En retard",
+      "HALF_DAY": "Demi-journée",
+      "OVERTIME": "Heures supp."
+    },
+    "empty": "Aucun ouvrier affecté à ce projet."
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "email": "Saisissez un e-mail valide",
+    "minLength": "Trop court",
+    "passwordLength": "Le mot de passe doit contenir au moins 8 caractères"
+  }
+}

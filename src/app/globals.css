@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.6rem;
+
+  --background: 0 0% 100%;
+  --foreground: 222 25% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 25% 12%;
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 16% 42%;
+  --border: 214 20% 90%;
+  --input: 214 20% 90%;
+  --ring: 24 90% 48%;
+
+  /* Brand: warm construction amber + slate. Swap here to rebrand. */
+  --primary: 24 90% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 30% 24%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 199 89% 48%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 65% 38%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 222 25% 12%;
+}
+
+.dark {
+  --background: 222 30% 9%;
+  --foreground: 210 20% 96%;
+  --card: 222 28% 12%;
+  --card-foreground: 210 20% 96%;
+  --muted: 217 20% 18%;
+  --muted-foreground: 215 16% 65%;
+  --border: 217 20% 20%;
+  --input: 217 20% 20%;
+  --ring: 24 90% 52%;
+  --primary: 24 90% 52%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 25% 80%;
+  --secondary-foreground: 222 30% 9%;
+  --accent: 199 89% 52%;
+  --accent-foreground: 0 0% 100%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+}
