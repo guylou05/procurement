@@ -266,6 +266,67 @@
     },
     "empty": "Aucune dépense pour le moment."
   },
+  "issue": {
+    "title": "Incidents",
+    "new": "Signaler un incident",
+    "project": "Projet",
+    "category": "Catégorie",
+    "severity": "Gravité",
+    "status": "Statut",
+    "description": "Description",
+    "reportedBy": "Signalé par",
+    "assignedTo": "Assigné à",
+    "resolve": "Résoudre",
+    "categories": {
+      "Safety": "Incident de sécurité",
+      "Quality": "Problème de qualité",
+      "EquipmentDamage": "Dommage matériel",
+      "MaterialShortage": "Pénurie de matériaux",
+      "ClientComplaint": "Réclamation client",
+      "Delay": "Retard",
+      "SiteAccess": "Accès au chantier",
+      "Worker": "Problème d'ouvrier",
+      "General": "Blocage général"
+    },
+    "severities": {
+      "LOW": "Basse",
+      "MEDIUM": "Moyenne",
+      "HIGH": "Haute",
+      "CRITICAL": "Critique"
+    },
+    "statuses": {
+      "OPEN": "Ouvert",
+      "IN_PROGRESS": "En cours",
+      "RESOLVED": "Résolu",
+      "CLOSED": "Fermé"
+    },
+    "empty": "Aucun incident signalé. Le chantier se déroule bien."
+  },
+  "task": {
+    "title": "Tâches",
+    "new": "Nouvelle tâche",
+    "taskTitle": "Titre",
+    "project": "Projet",
+    "description": "Description",
+    "priority": "Priorité",
+    "status": "Statut",
+    "dueDate": "Échéance",
+    "priorities": {
+      "LOW": "Basse",
+      "MEDIUM": "Moyenne",
+      "HIGH": "Haute",
+      "URGENT": "Urgente"
+    },
+    "statuses": {
+      "TODO": "À faire",
+      "IN_PROGRESS": "En cours",
+      "BLOCKED": "Bloqué",
+      "AWAITING_REVIEW": "En revue",
+      "COMPLETED": "Terminé",
+      "CANCELLED": "Annulé"
+    },
+    "empty": "Aucune tâche pour le moment."
+  },
   "validation": {
     "required": "Ce champ est requis",
     "email": "Saisissez un e-mail valide",

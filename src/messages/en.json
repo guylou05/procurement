@@ -266,6 +266,67 @@
     },
     "empty": "No expenses yet."
   },
+  "issue": {
+    "title": "Issues",
+    "new": "Report issue",
+    "project": "Project",
+    "category": "Category",
+    "severity": "Severity",
+    "status": "Status",
+    "description": "Description",
+    "reportedBy": "Reported by",
+    "assignedTo": "Assigned to",
+    "resolve": "Resolve",
+    "categories": {
+      "Safety": "Safety incident",
+      "Quality": "Quality issue",
+      "EquipmentDamage": "Equipment damage",
+      "MaterialShortage": "Material shortage",
+      "ClientComplaint": "Client complaint",
+      "Delay": "Delay",
+      "SiteAccess": "Site access problem",
+      "Worker": "Worker issue",
+      "General": "General blocker"
+    },
+    "severities": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "statuses": {
+      "OPEN": "Open",
+      "IN_PROGRESS": "In progress",
+      "RESOLVED": "Resolved",
+      "CLOSED": "Closed"
+    },
+    "empty": "No issues reported. Site is running smoothly."
+  },
+  "task": {
+    "title": "Tasks",
+    "new": "New task",
+    "taskTitle": "Title",
+    "project": "Project",
+    "description": "Description",
+    "priority": "Priority",
+    "status": "Status",
+    "dueDate": "Due date",
+    "priorities": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "URGENT": "Urgent"
+    },
+    "statuses": {
+      "TODO": "To do",
+      "IN_PROGRESS": "In progress",
+      "BLOCKED": "Blocked",
+      "AWAITING_REVIEW": "Awaiting review",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "empty": "No tasks yet."
+  },
   "validation": {
     "required": "This field is required",
     "email": "Enter a valid email",
