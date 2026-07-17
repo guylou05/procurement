@@ -101,7 +101,8 @@
     "pendingExpenses": "Pending expense approvals",
     "budgetVsActual": "Budget vs actual",
     "recentActivity": "Recent activity",
-    "projectsBehind": "Projects behind schedule"
+    "projectsBehind": "Projects behind schedule",
+    "maintenanceDue": "Equipment maintenance due"
   },
   "project": {
     "title": "Projects",
@@ -265,6 +266,33 @@
       "REIMBURSED": "Reimbursed"
     },
     "empty": "No expenses yet."
+  },
+  "equipment": {
+    "title": "Equipment",
+    "new": "New equipment",
+    "name": "Name",
+    "assetId": "Asset ID",
+    "category": "Category",
+    "serialNumber": "Serial number",
+    "purchaseCost": "Purchase cost",
+    "location": "Current location",
+    "condition": "Condition",
+    "status": "Status",
+    "nextMaintenance": "Next maintenance",
+    "assign": "Assign",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "maintenance": "Maintenance",
+    "statuses": {
+      "AVAILABLE": "Available",
+      "ASSIGNED": "Assigned",
+      "IN_USE": "In use",
+      "UNDER_MAINTENANCE": "Under maintenance",
+      "DAMAGED": "Damaged",
+      "LOST": "Lost",
+      "RETIRED": "Retired"
+    },
+    "empty": "No equipment yet. Add assets to track assignments and maintenance."
   },
   "invoice": {
     "title": "Invoices",

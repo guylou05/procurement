@@ -101,7 +101,8 @@
     "pendingExpenses": "Dépenses à approuver",
     "budgetVsActual": "Budget vs réel",
     "recentActivity": "Activité récente",
-    "projectsBehind": "Projets en retard"
+    "projectsBehind": "Projets en retard",
+    "maintenanceDue": "Maintenance d'équipement à prévoir"
   },
   "project": {
     "title": "Projets",
@@ -265,6 +266,33 @@
       "REIMBURSED": "Remboursé"
     },
     "empty": "Aucune dépense pour le moment."
+  },
+  "equipment": {
+    "title": "Équipements",
+    "new": "Nouvel équipement",
+    "name": "Nom",
+    "assetId": "N° d'inventaire",
+    "category": "Catégorie",
+    "serialNumber": "Numéro de série",
+    "purchaseCost": "Coût d'achat",
+    "location": "Emplacement actuel",
+    "condition": "État",
+    "status": "Statut",
+    "nextMaintenance": "Prochaine maintenance",
+    "assign": "Affecter",
+    "checkIn": "Retour",
+    "checkOut": "Sortie",
+    "maintenance": "Maintenance",
+    "statuses": {
+      "AVAILABLE": "Disponible",
+      "ASSIGNED": "Affecté",
+      "IN_USE": "En service",
+      "UNDER_MAINTENANCE": "En maintenance",
+      "DAMAGED": "Endommagé",
+      "LOST": "Perdu",
+      "RETIRED": "Retiré"
+    },
+    "empty": "Aucun équipement pour le moment. Ajoutez des actifs pour suivre les affectations et la maintenance."
   },
   "invoice": {
     "title": "Factures",

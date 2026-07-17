@@ -2,7 +2,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { requireAuth } from "@/server/authz";
 import { getDashboardData } from "@/server/services/dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FolderKanban, UserCheck, ClipboardList, AlertTriangle, Receipt, Clock } from "lucide-react";
+import { FolderKanban, UserCheck, ClipboardList, AlertTriangle, Receipt, Clock, Wrench } from "lucide-react";
 
 export default async function DashboardPage({
   params,
@@ -22,6 +22,7 @@ export default async function DashboardPage({
     { label: t("openIssues"), value: data.openIssues, icon: AlertTriangle },
     { label: t("pendingExpenses"), value: data.pendingExpenses, icon: Receipt },
     { label: t("projectsBehind"), value: data.projectsBehind, icon: Clock },
+    { label: t("maintenanceDue"), value: data.maintenanceDue, icon: Wrench },
   ];
 
   return (
