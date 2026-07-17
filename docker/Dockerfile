@@ -27,4 +27,6 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
 USER nextjs
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+# `next start` honors the PORT env var (Railway injects one). start:prod also
+# applies pending Prisma migrations before serving.
+CMD ["npm", "run", "start:prod"]

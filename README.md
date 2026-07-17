@@ -86,6 +86,12 @@ Demo login (after seeding): `owner@demo.africa` / `Password123!`
 docker compose up --build   # app + db + minio
 ```
 
+## Deploy to Railway
+
+See [`docs/DEPLOY_RAILWAY.md`](docs/DEPLOY_RAILWAY.md). `railway.json` builds
+`docker/Dockerfile`; `npm run start:prod` applies pending Prisma migrations before
+serving, and `/api/health` is wired as the healthcheck.
+
 ## Scripts
 
 | Script | Purpose |
