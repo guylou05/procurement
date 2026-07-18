@@ -43,7 +43,7 @@ DATABASE_URL="<railway postgres url>" npm run db:seed
 
 Logins created by the seed:
 
-- Super admin: `superadmin@buildflow.africa` / `Password123!` → `/en/admin`
+- Super admin (platform panel, no organization): `superadmin@buildflow.africa` / `SuperAdmin123!` → `/en/admin`
 - Owner: `owner@demo.africa` / `Password123!`
 - Client portal: `client@demo.africa` / `Password123!`
 
