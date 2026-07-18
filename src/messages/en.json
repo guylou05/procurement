@@ -53,14 +53,69 @@
     "signOut": "Sign out"
   },
   "landing": {
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "markets": "Markets",
+      "faq": "FAQ"
+    },
+    "badge": "Built for African construction & field service teams",
     "heroTitle": "Run every job site from your phone",
-    "heroSubtitle": "Projects, attendance, daily reports, materials and expenses — built for African construction teams working on WhatsApp, paper and Excel today.",
-    "getStarted": "Get started",
+    "heroSubtitle": "Projects, attendance, daily reports, materials and expenses — one bilingual platform for construction and service companies that run today on WhatsApp, paper and Excel.",
+    "getStarted": "Get started free",
     "signIn": "Sign in",
+    "seeHowItWorks": "See how it works",
+    "heroNote": "No credit card required · Set up your company in minutes",
+    "trustBar": {
+      "mobile": "Mobile-first",
+      "bilingual": "English & French",
+      "secure": "Multi-tenant & secure",
+      "offline": "Built for slow connections"
+    },
+    "featuresTitle": "Everything your field teams need, in one place",
+    "featuresSubtitle": "Replace scattered WhatsApp threads, paper notebooks and Excel sheets with one system your whole company can see.",
     "features": {
-      "mobile": "Mobile-first, works on slow connections",
-      "bilingual": "English & French out of the box",
-      "multitenant": "Secure, multi-company by design"
+      "dailyReports": { "title": "Daily site reports", "desc": "Supervisors log work completed, materials used and issues in under three minutes — from any phone." },
+      "attendance": { "title": "Attendance & labor", "desc": "Fast per-worker check-in with GPS and audited corrections, so labor costs are always accurate." },
+      "projects": { "title": "Projects & budgets", "desc": "Track every job site's status, budget, milestones and completion percentage in real time." },
+      "materials": { "title": "Materials & inventory", "desc": "Low-stock alerts and a full request-to-approval workflow keep job sites supplied." },
+      "expenses": { "title": "Expenses & approvals", "desc": "Field expenses route to the right approver automatically, with configurable auto-approval thresholds." },
+      "equipment": { "title": "Equipment tracking", "desc": "Know where every asset is, who has it, and when it's due for maintenance." },
+      "portal": { "title": "Client portal", "desc": "Give clients a clean view of progress, milestones and invoices — without exposing internal costs or margins." },
+      "team": { "title": "Roles & permissions", "desc": "Owners, project managers, supervisors, accountants and field workers each see exactly what they need." }
+    },
+    "howItWorksTitle": "From sign-up to your first site report in minutes",
+    "howItWorksSubtitle": "No implementation project, no training course — just a simple setup your team can start using today.",
+    "steps": {
+      "one": { "title": "Create your company", "desc": "Set your country, currency and language. English and French are both first-class from day one." },
+      "two": { "title": "Add projects & invite your team", "desc": "Create your first job site, invite supervisors and workers, and assign roles in minutes." },
+      "three": { "title": "Run daily operations", "desc": "Attendance, daily reports, materials and expenses — captured from the field, on any phone." },
+      "four": { "title": "See it all from the dashboard", "desc": "Management gets live visibility into every site, every cost, every approval — no more chasing updates." }
+    },
+    "marketsTitle": "Built for Francophone and Anglophone Africa",
+    "marketsSubtitle": "Local currencies, time zones and business French built in — not bolted on. Currently configured for these markets, with more added over time.",
+    "faqTitle": "Frequently asked questions",
+    "faq": {
+      "q1": "Is BuildFlow available in French?",
+      "a1": "Yes. English and French are both fully supported from the first screen — navigation, forms, notifications and reports — and each teammate can choose their own language independently of the company default.",
+      "q2": "Which countries are supported?",
+      "a2": "The platform ships with currency and timezone defaults for major Francophone and Anglophone African markets, and supports any organization's own currency and country setting.",
+      "q3": "Does it work on a slow connection?",
+      "a3": "Yes. The app is built mobile-first as an installable Progressive Web App, with lightweight pages and draft-saving on the highest-priority field forms so a dropped connection doesn't lose your work.",
+      "q4": "Is my company's data isolated from other companies?",
+      "a4": "Yes. Every organization's data is isolated at the server level — access is verified on every request and never trusted from the browser, so one company can never see another's records.",
+      "q5": "Can I control what my clients see?",
+      "a5": "Yes. Clients only ever see a dedicated portal showing shared project progress, milestones and invoices — never internal costs, worker pay rates or margins."
+    },
+    "ctaTitle": "Bring your job sites onto one platform",
+    "ctaSubtitle": "Set up your company and invite your team — free to get started.",
+    "ctaButton": "Create your account",
+    "footer": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal",
+      "contact": "Contact",
+      "rights": "All rights reserved."
     }
   },
   "auth": {

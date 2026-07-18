@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { requireAuth } from "@/server/authz";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { brand } from "@/config/brand";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 /**
  * Client portal shell — deliberately minimal (no internal sidebar/nav). Any

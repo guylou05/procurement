@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { getInvitationByToken } from "@/server/services/team";
@@ -5,6 +6,8 @@ import { Link } from "@/i18n/routing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { acceptInviteAction } from "./actions";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function AcceptInvitePage({
   params,
