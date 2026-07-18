@@ -235,6 +235,50 @@
     },
     "empty": "No workers assigned to this project."
   },
+  "admin": {
+    "title": "Platform Admin",
+    "dashboard": "Dashboard",
+    "organizations": "Organizations",
+    "organization": "Organization",
+    "auditLog": "Audit log",
+    "backToAdmin": "Back to admin",
+    "stats": {
+      "organizations": "Organizations",
+      "suspended": "Suspended",
+      "users": "Total users",
+      "projects": "Total projects",
+      "newOrganizations": "New in last 30 days"
+    },
+    "recentActivity": "Recent platform activity",
+    "activityEmpty": "No activity recorded yet.",
+    "orgTable": {
+      "name": "Organization",
+      "country": "Country",
+      "members": "Members",
+      "projects": "Projects",
+      "created": "Created",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "suspend": "Suspend",
+    "restore": "Restore",
+    "suspendConfirm": "Suspended organizations lose access immediately; members cannot sign in to their workspace until restored.",
+    "orgDetail": {
+      "membersTitle": "Members",
+      "projectsTitle": "Recent projects",
+      "noProjects": "No projects yet."
+    },
+    "signInAsAdmin": "Signed in as platform admin",
+    "emptyOrgs": "No organizations yet."
+  },
+  "suspended": {
+    "title": "Your organization has been suspended",
+    "body": "Access to your company's workspace has been temporarily suspended. If you believe this is a mistake, contact support.",
+    "contact": "Contact support"
+  },
   "team": {
     "title": "Team",
     "members": "Members",

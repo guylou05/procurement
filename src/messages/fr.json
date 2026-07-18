@@ -235,6 +235,50 @@
     },
     "empty": "Aucun ouvrier affecté à ce projet."
   },
+  "admin": {
+    "title": "Administration plateforme",
+    "dashboard": "Tableau de bord",
+    "organizations": "Organisations",
+    "organization": "Organisation",
+    "auditLog": "Journal d'audit",
+    "backToAdmin": "Retour à l'administration",
+    "stats": {
+      "organizations": "Organisations",
+      "suspended": "Suspendues",
+      "users": "Utilisateurs au total",
+      "projects": "Projets au total",
+      "newOrganizations": "Nouvelles (30 derniers jours)"
+    },
+    "recentActivity": "Activité récente de la plateforme",
+    "activityEmpty": "Aucune activité enregistrée pour le moment.",
+    "orgTable": {
+      "name": "Organisation",
+      "country": "Pays",
+      "members": "Membres",
+      "projects": "Projets",
+      "created": "Créée le",
+      "status": "Statut"
+    },
+    "status": {
+      "active": "Active",
+      "suspended": "Suspendue"
+    },
+    "suspend": "Suspendre",
+    "restore": "Rétablir",
+    "suspendConfirm": "Les organisations suspendues perdent immédiatement l'accès ; les membres ne peuvent plus se connecter à leur espace tant qu'elle n'est pas rétablie.",
+    "orgDetail": {
+      "membersTitle": "Membres",
+      "projectsTitle": "Projets récents",
+      "noProjects": "Aucun projet pour le moment."
+    },
+    "signInAsAdmin": "Connecté en tant qu'administrateur plateforme",
+    "emptyOrgs": "Aucune organisation pour le moment."
+  },
+  "suspended": {
+    "title": "Votre organisation a été suspendue",
+    "body": "L'accès à l'espace de travail de votre entreprise a été temporairement suspendu. Si vous pensez qu'il s'agit d'une erreur, contactez le support.",
+    "contact": "Contacter le support"
+  },
   "team": {
     "title": "Équipe",
     "members": "Membres",

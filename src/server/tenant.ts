@@ -72,3 +72,18 @@ export async function getUserOrganizations(userId: string) {
     orderBy: { createdAt: "asc" },
   });
 }
+
+/**
+ * True if the user's only membership(s) point at a suspended organization. Used to
+ * distinguish "never created a company" (-> onboarding) from "your company was
+ * suspended" (-> a clear notice) so a suspended member is never nudged into creating
+ * a duplicate organization.
+ */
+export async function hasOnlySuspendedMemberships(userId: string): Promise<boolean> {
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    select: { organization: { select: { deletedAt: true } } },
+  });
+  if (memberships.length === 0) return false;
+  return memberships.every((m) => m.organization.deletedAt !== null);
+}
