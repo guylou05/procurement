@@ -11,9 +11,16 @@ export default async function DashboardPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const ctx = await requireAuth(locale);
-  const t = await getTranslations("dashboard");
-  const data = await getDashboardData(ctx);
+
+  let ctx, t, data;
+  try {
+    ctx = await requireAuth(locale);
+    t = await getTranslations("dashboard");
+    data = await getDashboardData(ctx);
+  } catch (err) {
+    console.error("[DashboardPage] failed:", err);
+    throw err;
+  }
 
   const cards = [
     { label: t("activeProjects"), value: data.activeProjects, icon: FolderKanban },
