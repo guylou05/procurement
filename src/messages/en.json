@@ -272,7 +272,39 @@
       "noProjects": "No projects yet."
     },
     "signInAsAdmin": "Signed in as platform admin",
-    "emptyOrgs": "No organizations yet."
+    "emptyOrgs": "No organizations yet.",
+    "impersonate": "View as this org",
+    "impersonateBanner": "You are viewing {org} as a platform admin.",
+    "exitImpersonation": "Exit",
+    "auditLog": "Audit log",
+    "viewAuditLog": "View audit log",
+    "auditEmpty": "No audit entries yet.",
+    "auditColumns": {
+      "when": "When",
+      "who": "User",
+      "org": "Organization",
+      "action": "Action",
+      "record": "Record"
+    },
+    "kpi": {
+      "signupsTrend": "New organizations",
+      "usersTrend": "New users",
+      "projectsTrend": "New projects",
+      "last8Weeks": "Last 8 weeks",
+      "topOrgs": "Most active organizations",
+      "byProjects": "projects",
+      "byMembers": "members",
+      "mrr": "Est. monthly recurring",
+      "activeSubs": "Active subscriptions"
+    },
+    "orgDetailExtra": {
+      "subscription": "Subscription",
+      "plan": "Plan",
+      "noPlan": "No plan",
+      "status": "Status",
+      "activity": "Recent activity",
+      "noActivity": "No recent activity."
+    }
   },
   "suspended": {
     "title": "Your organization has been suspended",

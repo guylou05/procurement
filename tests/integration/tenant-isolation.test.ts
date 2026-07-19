@@ -44,6 +44,7 @@ suite("tenant isolation", () => {
       organizationId: orgAId,
       role: "OWNER",
       isSuperAdmin: false,
+      impersonating: false,
       organization: { id: orgAId, name: "Org A", currency: "XAF", defaultLocale: "en" },
     };
   });

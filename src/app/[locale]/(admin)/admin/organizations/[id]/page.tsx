@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { getCountry } from "@/config/countries";
 import { formatDate } from "@/lib/utils";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Eye } from "lucide-react";
 import { setOrganizationSuspendedAction } from "../../actions";
+import { enterImpersonationAction } from "@/server/actions/impersonation";
 
 export default async function AdminOrganizationDetailPage({
   params,
@@ -53,6 +54,16 @@ export default async function AdminOrganizationDetailPage({
           <Badge tone={suspended ? "danger" : "success"}>
             {suspended ? t("status.suspended") : t("status.active")}
           </Badge>
+          {!suspended ? (
+            <form action={enterImpersonationAction}>
+              <input type="hidden" name="organizationId" value={org.id} />
+              <input type="hidden" name="locale" value={locale} />
+              <Button type="submit" size="sm" variant="outline">
+                <Eye className="size-4" />
+                {t("impersonate")}
+              </Button>
+            </form>
+          ) : null}
           <form action={toggleSuspend}>
             <input type="hidden" name="organizationId" value={org.id} />
             <input type="hidden" name="suspended" value={(!suspended).toString()} />

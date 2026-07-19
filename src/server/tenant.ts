@@ -4,6 +4,7 @@ import { auth } from "@/server/auth";
 import { prisma } from "@/lib/prisma";
 
 export const ACTIVE_ORG_COOKIE = "bf_org";
+export const IMPERSONATE_COOKIE = "bf_impersonate";
 
 export interface TenantContext {
   userId: string;
@@ -12,6 +13,8 @@ export interface TenantContext {
   organizationId: string;
   role: Role;
   isSuperAdmin: boolean;
+  /** True when a platform super admin is viewing this org via impersonation. */
+  impersonating: boolean;
   organization: {
     id: string;
     name: string;
@@ -33,6 +36,39 @@ export async function getTenantContext(): Promise<TenantContext | null> {
     if (!userId) return null;
 
     const jar = await cookies();
+
+    // Impersonation: only a platform super admin may enter an org they don't belong
+    // to. The target org id lives in a server-set httpOnly cookie and the super-admin
+    // flag is read from the verified session — never trusted from the client. The
+    // resolved context is flagged `impersonating` so the UI can surface a banner.
+    const impersonateOrgId = jar.get(IMPERSONATE_COOKIE)?.value;
+    if (impersonateOrgId && session.user.isSuperAdmin) {
+      const org = await prisma.organization.findFirst({
+        where: { id: impersonateOrgId, deletedAt: null },
+      });
+      const admin = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { name: true, email: true },
+      });
+      if (org && admin) {
+        return {
+          userId,
+          userName: admin.name ?? admin.email,
+          userEmail: admin.email,
+          organizationId: org.id,
+          role: "OWNER",
+          isSuperAdmin: true,
+          impersonating: true,
+          organization: {
+            id: org.id,
+            name: org.name,
+            currency: org.currency,
+            defaultLocale: org.defaultLocale,
+          },
+        };
+      }
+    }
+
     const requestedOrgId = jar.get(ACTIVE_ORG_COOKIE)?.value;
 
     // Validate membership: the requested org must be one the user actually belongs to.
@@ -56,6 +92,7 @@ export async function getTenantContext(): Promise<TenantContext | null> {
       organizationId: membership.organizationId,
       role: membership.role,
       isSuperAdmin: session!.user.isSuperAdmin,
+      impersonating: false,
       organization: {
         id: membership.organization.id,
         name: membership.organization.name,

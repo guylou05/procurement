@@ -5,7 +5,7 @@ import { Link } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { brand } from "@/config/brand";
-import { LayoutDashboard, Building2 } from "lucide-react";
+import { LayoutDashboard, Building2, ScrollText } from "lucide-react";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -33,6 +33,7 @@ export default async function AdminLayout({
   const nav = [
     { href: "/admin", label: t("dashboard"), icon: LayoutDashboard },
     { href: "/admin/organizations", label: t("organizations"), icon: Building2 },
+    { href: "/admin/audit-log", label: t("auditLog"), icon: ScrollText },
   ];
 
   return (
