@@ -19,7 +19,7 @@ Add the **PostgreSQL** plugin to the project, then on the app service set:
 | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (reference the plugin variable) |
 | `AUTH_SECRET` | output of `openssl rand -base64 32` |
 | `AUTH_TRUST_HOST` | `true` |
-| `APP_URL` | your public URL, e.g. `https://<service>.up.railway.app` |
+| `APP_URL` | your public URL, **including the `https://` scheme**, e.g. `https://<service>.up.railway.app` (a bare hostname is normalized to `https://` in code, but set it fully to be safe) |
 
 Optional (object storage — site photos/receipts; any S3-compatible provider such as
 Cloudflare R2 works):

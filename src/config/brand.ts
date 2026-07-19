@@ -42,6 +42,19 @@ export type Brand = typeof brand;
 
 /** Absolute site URL for metadata (canonical links, OG, sitemap). */
 export function getSiteUrl(): string {
-  const url = process.env.APP_URL ?? `https://${brand.domain}`;
-  return url.replace(/\/$/, "");
+  const fallback = `https://${brand.domain}`;
+  const raw = process.env.APP_URL?.trim();
+  if (!raw) return fallback;
+
+  // Tolerate a bare hostname (e.g. "my-app.up.railway.app") — a common deploy-config
+  // mistake. Without a protocol, `new URL(...)` throws "Invalid URL", which — because
+  // it happens inside generateMetadata — crashes every page render before any of our
+  // own try/catch guards can see it. Normalize to a valid absolute URL, and fall back
+  // to the brand domain if it still can't be parsed.
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    return new URL(withProtocol).toString().replace(/\/$/, "");
+  } catch {
+    return fallback;
+  }
 }
