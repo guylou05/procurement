@@ -27,41 +27,49 @@ export interface TenantContext {
  * Returns null when there is no session or no valid membership.
  */
 export async function getTenantContext(): Promise<TenantContext | null> {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) return null;
+  try {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) return null;
 
-  const jar = await cookies();
-  const requestedOrgId = jar.get(ACTIVE_ORG_COOKIE)?.value;
+    const jar = await cookies();
+    const requestedOrgId = jar.get(ACTIVE_ORG_COOKIE)?.value;
 
-  // Validate membership: the requested org must be one the user actually belongs to.
-  const membership = requestedOrgId
-    ? await prisma.organizationMember.findUnique({
-        where: { organizationId_userId: { organizationId: requestedOrgId, userId } },
-        include: { organization: true, user: true },
-      })
-    : await prisma.organizationMember.findFirst({
-        where: { userId },
-        include: { organization: true, user: true },
-        orderBy: { createdAt: "asc" },
-      });
+    // Validate membership: the requested org must be one the user actually belongs to.
+    const membership = requestedOrgId
+      ? await prisma.organizationMember.findUnique({
+          where: { organizationId_userId: { organizationId: requestedOrgId, userId } },
+          include: { organization: true, user: true },
+        })
+      : await prisma.organizationMember.findFirst({
+          where: { userId },
+          include: { organization: true, user: true },
+          orderBy: { createdAt: "asc" },
+        });
 
-  if (!membership || membership.organization.deletedAt) return null;
+    if (!membership || membership.organization.deletedAt) return null;
 
-  return {
-    userId,
-    userName: membership.user.name ?? membership.user.email,
-    userEmail: membership.user.email,
-    organizationId: membership.organizationId,
-    role: membership.role,
-    isSuperAdmin: session!.user.isSuperAdmin,
-    organization: {
-      id: membership.organization.id,
-      name: membership.organization.name,
-      currency: membership.organization.currency,
-      defaultLocale: membership.organization.defaultLocale,
-    },
-  };
+    return {
+      userId,
+      userName: membership.user.name ?? membership.user.email,
+      userEmail: membership.user.email,
+      organizationId: membership.organizationId,
+      role: membership.role,
+      isSuperAdmin: session!.user.isSuperAdmin,
+      organization: {
+        id: membership.organization.id,
+        name: membership.organization.name,
+        currency: membership.organization.currency,
+        defaultLocale: membership.organization.defaultLocale,
+      },
+    };
+  } catch (err) {
+    // Logged raw, server-side, before Next's production redaction can strip it —
+    // this is the one place a Server-Component render error still has its real
+    // message and stack by the time it reaches a log line.
+    console.error("[getTenantContext] failed:", err);
+    throw err;
+  }
 }
 
 /** Returns the org ids a user belongs to — used for the org switcher only. */
