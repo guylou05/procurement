@@ -9,6 +9,14 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 // Authenticated app — never indexed, even if a page is somehow reached without auth.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
+// requireAuth() only calls cookies()/headers() conditionally (it returns early when
+// there's no session), so Next can't detect this segment is dynamic on its own — it
+// was being treated as an ambiguous static-generation candidate, which produced a
+// real "Dynamic server usage" error at build time and, on Railway, an equivalent
+// unhandled error at runtime. Every route under here is per-user and must never be
+// static or cached, so force it explicitly rather than rely on inference.
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
   params,

@@ -9,6 +9,10 @@ import { LayoutDashboard, Building2 } from "lucide-react";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
+// See (app)/layout.tsx for why this is required: auth-dependent segments must never
+// be left to Next's static/dynamic inference.
+export const dynamic = "force-dynamic";
+
 /**
  * Platform admin shell — deliberately separate from the org sidebar. Every page
  * under this layout is gated by requireSuperAdmin(), independent of any

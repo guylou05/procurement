@@ -7,6 +7,10 @@ import { brand } from "@/config/brand";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
+// See (app)/layout.tsx for why this is required: auth-dependent segments must never
+// be left to Next's static/dynamic inference.
+export const dynamic = "force-dynamic";
+
 /**
  * Client portal shell — deliberately minimal (no internal sidebar/nav). Any
  * authenticated user may load it, but the portal services only ever return data for
