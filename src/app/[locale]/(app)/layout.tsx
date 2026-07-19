@@ -18,7 +18,20 @@ export default async function AppLayout({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const ctx = await requireAuth(locale);
+
+  let ctx;
+  try {
+    ctx = await requireAuth(locale);
+  } catch (err) {
+    // requireAuth() itself throws Next's special redirect signal on the normal
+    // unauthenticated path (digest starts with "NEXT_REDIRECT") — that's expected
+    // control flow, not a bug, so only log genuine errors before rethrowing either way.
+    const digest = (err as { digest?: string })?.digest;
+    if (!digest?.startsWith("NEXT_REDIRECT")) {
+      console.error("[AppLayout] requireAuth failed:", err);
+    }
+    throw err;
+  }
 
   // Clients never see the internal app — send them to their portal.
   if (ctx.role === "CLIENT") redirect(`/${locale}/portal`);
