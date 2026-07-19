@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,6 @@ import { Label } from "@/components/ui/label";
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations("auth");
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -24,13 +22,16 @@ export function LoginForm({ locale }: { locale: string }) {
       password: String(form.get("password")),
       redirect: false,
     });
-    setPending(false);
     if (res?.error) {
+      setPending(false);
       setError(t("invalidCredentials"));
       return;
     }
-    router.push(`/${locale}/dashboard`);
-    router.refresh();
+    // A full navigation (not router.push + router.refresh) guarantees a single,
+    // fresh request with no client router-cache reuse from a pre-login visit to the
+    // same URL — the destination's own server-side auth check routes each role to
+    // the right place (dashboard, /admin, /onboarding, /suspended).
+    window.location.assign(`/${locale}/dashboard`);
   }
 
   return (
