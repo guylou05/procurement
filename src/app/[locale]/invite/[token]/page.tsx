@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { acceptInviteAction } from "./actions";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 export default async function AcceptInvitePage({
   params,

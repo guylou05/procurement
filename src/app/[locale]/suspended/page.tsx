@@ -10,6 +10,7 @@ import { brand } from "@/config/brand";
 import { Ban } from "lucide-react";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 export default async function SuspendedPage({
   params,

@@ -11,6 +11,7 @@ import { COUNTRIES, CURRENCIES } from "@/config/countries";
 import { createOrganizationAction } from "./actions";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 export default async function OnboardingPage({
   params,
