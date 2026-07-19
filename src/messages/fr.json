@@ -272,7 +272,39 @@
       "noProjects": "Aucun projet pour le moment."
     },
     "signInAsAdmin": "Connecté en tant qu'administrateur plateforme",
-    "emptyOrgs": "Aucune organisation pour le moment."
+    "emptyOrgs": "Aucune organisation pour le moment.",
+    "impersonate": "Voir en tant que cette organisation",
+    "impersonateBanner": "Vous consultez {org} en tant qu'administrateur plateforme.",
+    "exitImpersonation": "Quitter",
+    "auditLog": "Journal d'audit",
+    "viewAuditLog": "Voir le journal d'audit",
+    "auditEmpty": "Aucune entrée d'audit pour le moment.",
+    "auditColumns": {
+      "when": "Quand",
+      "who": "Utilisateur",
+      "org": "Organisation",
+      "action": "Action",
+      "record": "Enregistrement"
+    },
+    "kpi": {
+      "signupsTrend": "Nouvelles organisations",
+      "usersTrend": "Nouveaux utilisateurs",
+      "projectsTrend": "Nouveaux projets",
+      "last8Weeks": "8 dernières semaines",
+      "topOrgs": "Organisations les plus actives",
+      "byProjects": "projets",
+      "byMembers": "membres",
+      "mrr": "Revenu mensuel estimé",
+      "activeSubs": "Abonnements actifs"
+    },
+    "orgDetailExtra": {
+      "subscription": "Abonnement",
+      "plan": "Forfait",
+      "noPlan": "Aucun forfait",
+      "status": "Statut",
+      "activity": "Activité récente",
+      "noActivity": "Aucune activité récente."
+    }
   },
   "suspended": {
     "title": "Votre organisation a été suspendue",

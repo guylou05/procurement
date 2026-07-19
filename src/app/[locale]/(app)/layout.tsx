@@ -5,6 +5,7 @@ import { requireAuth } from "@/server/authz";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { ImpersonationBanner } from "@/components/layout/impersonation-banner";
 
 // Authenticated app — never indexed, even if a page is somehow reached without auth.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -48,6 +49,9 @@ export default async function AppLayout({
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
+        {ctx.impersonating ? (
+          <ImpersonationBanner orgName={ctx.organization.name} locale={locale} />
+        ) : null}
         <Topbar orgName={ctx.organization.name} userName={ctx.userName} />
         <main className="flex-1 p-4 pb-24 lg:p-6 lg:pb-6">{children}</main>
         <MobileNav />
