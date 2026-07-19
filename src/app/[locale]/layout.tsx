@@ -1,20 +1,63 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { brand } from "@/config/brand";
+import { brand, getSiteUrl } from "@/config/brand";
 import "../globals.css";
-
-export const metadata: Metadata = {
-  title: brand.name,
-  description: brand.tagline.en,
-  manifest: "/manifest.webmanifest",
-};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isFr = locale === "fr";
+  const siteUrl = getSiteUrl();
+  const tagline = isFr ? brand.tagline.fr : brand.tagline.en;
+  const description = isFr ? brand.description.fr : brand.description.en;
+  const keywords = isFr ? brand.keywords.fr : brand.keywords.en;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: { default: `${brand.name} — ${tagline}`, template: `%s — ${brand.name}` },
+    description,
+    keywords: [...keywords],
+    manifest: "/manifest.webmanifest",
+    applicationName: brand.name,
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        en: `${siteUrl}/en`,
+        fr: `${siteUrl}/fr`,
+        "x-default": `${siteUrl}/en`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: `${siteUrl}/${locale}`,
+      siteName: brand.name,
+      title: `${brand.name} — ${tagline}`,
+      description,
+      locale: isFr ? "fr_FR" : "en_US",
+      alternateLocale: isFr ? "en_US" : "fr_FR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${brand.name} — ${tagline}`,
+      description,
+    },
+    robots: { index: true, follow: true },
+  };
+}
+
+export const viewport: Viewport = {
+  themeColor: brand.themeColor,
+};
 
 export default async function LocaleLayout({
   children,

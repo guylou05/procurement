@@ -53,14 +53,69 @@
     "signOut": "Se déconnecter"
   },
   "landing": {
+    "nav": {
+      "features": "Fonctionnalités",
+      "howItWorks": "Comment ça marche",
+      "markets": "Marchés",
+      "faq": "FAQ"
+    },
+    "badge": "Conçu pour les équipes de construction et de services en Afrique",
     "heroTitle": "Gérez chaque chantier depuis votre téléphone",
-    "heroSubtitle": "Projets, présence, rapports journaliers, matériaux et dépenses — conçu pour les équipes de construction africaines qui travaillent aujourd'hui sur WhatsApp, papier et Excel.",
-    "getStarted": "Commencer",
+    "heroSubtitle": "Projets, présence, rapports journaliers, matériaux et dépenses — une seule plateforme bilingue pour les entreprises de construction et de services qui fonctionnent aujourd'hui sur WhatsApp, papier et Excel.",
+    "getStarted": "Commencer gratuitement",
     "signIn": "Se connecter",
+    "seeHowItWorks": "Voir comment ça marche",
+    "heroNote": "Sans carte bancaire · Configurez votre entreprise en quelques minutes",
+    "trustBar": {
+      "mobile": "Mobile d'abord",
+      "bilingual": "Anglais et français",
+      "secure": "Multi-entreprise et sécurisé",
+      "offline": "Conçu pour les connexions lentes"
+    },
+    "featuresTitle": "Tout ce dont vos équipes de terrain ont besoin, au même endroit",
+    "featuresSubtitle": "Remplacez les fils WhatsApp dispersés, les carnets papier et les fichiers Excel par un seul système visible par toute l'entreprise.",
     "features": {
-      "mobile": "Mobile d'abord, fonctionne sur connexions lentes",
-      "bilingual": "Anglais et français par défaut",
-      "multitenant": "Sécurisé, multi-entreprise par conception"
+      "dailyReports": { "title": "Rapports journaliers de chantier", "desc": "Les chefs de chantier consignent les travaux réalisés, les matériaux utilisés et les incidents en moins de trois minutes, depuis n'importe quel téléphone." },
+      "attendance": { "title": "Présence et main-d'œuvre", "desc": "Pointage rapide par ouvrier avec GPS et corrections auditées, pour des coûts de main-d'œuvre toujours exacts." },
+      "projects": { "title": "Projets et budgets", "desc": "Suivez en temps réel le statut, le budget, les jalons et l'avancement de chaque chantier." },
+      "materials": { "title": "Matériaux et inventaire", "desc": "Alertes de stock faible et workflow complet de demande à approbation pour que les chantiers ne manquent de rien." },
+      "expenses": { "title": "Dépenses et approbations", "desc": "Les dépenses de terrain sont automatiquement routées vers le bon approbateur, avec des seuils d'approbation automatique configurables." },
+      "equipment": { "title": "Suivi des équipements", "desc": "Sachez où se trouve chaque équipement, qui l'utilise, et quand la prochaine maintenance est due." },
+      "portal": { "title": "Portail client", "desc": "Offrez à vos clients une vue claire de l'avancement, des jalons et des factures — sans exposer les coûts ou marges internes." },
+      "team": { "title": "Rôles et permissions", "desc": "Propriétaires, chefs de projet, chefs de chantier, comptables et ouvriers voient chacun exactement ce dont ils ont besoin." }
+    },
+    "howItWorksTitle": "De l'inscription à votre premier rapport de chantier en quelques minutes",
+    "howItWorksSubtitle": "Pas de projet d'implémentation, pas de formation — juste une configuration simple que votre équipe peut utiliser dès aujourd'hui.",
+    "steps": {
+      "one": { "title": "Créez votre entreprise", "desc": "Définissez votre pays, votre devise et votre langue. L'anglais et le français sont tous deux natifs dès le premier jour." },
+      "two": { "title": "Ajoutez des projets et invitez votre équipe", "desc": "Créez votre premier chantier, invitez chefs de chantier et ouvriers, et attribuez les rôles en quelques minutes." },
+      "three": { "title": "Gérez les opérations quotidiennes", "desc": "Présence, rapports journaliers, matériaux et dépenses — saisis depuis le terrain, sur n'importe quel téléphone." },
+      "four": { "title": "Visualisez tout depuis le tableau de bord", "desc": "La direction obtient une visibilité en temps réel sur chaque chantier, chaque coût, chaque approbation — plus besoin de relancer." }
+    },
+    "marketsTitle": "Conçu pour l'Afrique francophone et anglophone",
+    "marketsSubtitle": "Devises locales, fuseaux horaires et français des affaires natifs — pas ajoutés après coup. Actuellement configuré pour ces marchés, avec d'autres à venir.",
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "q1": "BuildFlow est-il disponible en français ?",
+      "a1": "Oui. L'anglais et le français sont tous deux entièrement pris en charge dès le premier écran — navigation, formulaires, notifications et rapports — et chaque membre de l'équipe peut choisir sa propre langue indépendamment de celle de l'entreprise.",
+      "q2": "Quels pays sont pris en charge ?",
+      "a2": "La plateforme est livrée avec des devises et fuseaux horaires par défaut pour les principaux marchés africains francophones et anglophones, et prend en charge la devise et le pays propres à chaque organisation.",
+      "q3": "Fonctionne-t-il sur une connexion lente ?",
+      "a3": "Oui. L'application est conçue mobile d'abord comme une Progressive Web App installable, avec des pages légères et l'enregistrement de brouillons sur les formulaires de terrain prioritaires, pour qu'une coupure de connexion ne fasse pas perdre votre travail.",
+      "q4": "Les données de mon entreprise sont-elles isolées des autres entreprises ?",
+      "a4": "Oui. Les données de chaque organisation sont isolées au niveau du serveur — l'accès est vérifié à chaque requête et jamais basé sur ce qu'envoie le navigateur, une entreprise ne peut donc jamais voir les données d'une autre.",
+      "q5": "Puis-je contrôler ce que voient mes clients ?",
+      "a5": "Oui. Les clients n'accèdent qu'à un portail dédié montrant l'avancement des projets partagés, les jalons et les factures — jamais les coûts internes, les taux de rémunération des ouvriers ou les marges."
+    },
+    "ctaTitle": "Regroupez tous vos chantiers sur une seule plateforme",
+    "ctaSubtitle": "Configurez votre entreprise et invitez votre équipe — gratuit pour commencer.",
+    "ctaButton": "Créer votre compte",
+    "footer": {
+      "product": "Produit",
+      "company": "Entreprise",
+      "legal": "Mentions légales",
+      "contact": "Contact",
+      "rights": "Tous droits réservés."
     }
   },
   "auth": {
@@ -179,6 +234,50 @@
       "OVERTIME": "Heures supp."
     },
     "empty": "Aucun ouvrier affecté à ce projet."
+  },
+  "admin": {
+    "title": "Administration plateforme",
+    "dashboard": "Tableau de bord",
+    "organizations": "Organisations",
+    "organization": "Organisation",
+    "auditLog": "Journal d'audit",
+    "backToAdmin": "Retour à l'administration",
+    "stats": {
+      "organizations": "Organisations",
+      "suspended": "Suspendues",
+      "users": "Utilisateurs au total",
+      "projects": "Projets au total",
+      "newOrganizations": "Nouvelles (30 derniers jours)"
+    },
+    "recentActivity": "Activité récente de la plateforme",
+    "activityEmpty": "Aucune activité enregistrée pour le moment.",
+    "orgTable": {
+      "name": "Organisation",
+      "country": "Pays",
+      "members": "Membres",
+      "projects": "Projets",
+      "created": "Créée le",
+      "status": "Statut"
+    },
+    "status": {
+      "active": "Active",
+      "suspended": "Suspendue"
+    },
+    "suspend": "Suspendre",
+    "restore": "Rétablir",
+    "suspendConfirm": "Les organisations suspendues perdent immédiatement l'accès ; les membres ne peuvent plus se connecter à leur espace tant qu'elle n'est pas rétablie.",
+    "orgDetail": {
+      "membersTitle": "Membres",
+      "projectsTitle": "Projets récents",
+      "noProjects": "Aucun projet pour le moment."
+    },
+    "signInAsAdmin": "Connecté en tant qu'administrateur plateforme",
+    "emptyOrgs": "Aucune organisation pour le moment."
+  },
+  "suspended": {
+    "title": "Votre organisation a été suspendue",
+    "body": "L'accès à l'espace de travail de votre entreprise a été temporairement suspendu. Si vous pensez qu'il s'agit d'une erreur, contactez le support.",
+    "contact": "Contacter le support"
   },
   "team": {
     "title": "Équipe",

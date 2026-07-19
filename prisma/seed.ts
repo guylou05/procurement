@@ -12,6 +12,24 @@ const prisma = new PrismaClient();
 async function main() {
   const passwordHash = await bcrypt.hash("Password123!", 12);
 
+  // ── Platform super admin ──
+  // Deliberately has NO organization membership: a pure platform account that lands
+  // in the admin panel (/admin), separate from any tenant's workspace.
+  const superAdminPasswordHash = await bcrypt.hash("SuperAdmin123!", 12);
+  await prisma.user.upsert({
+    where: { email: "superadmin@buildflow.africa" },
+    update: { isSuperAdmin: true },
+    create: {
+      email: "superadmin@buildflow.africa",
+      name: "Platform Admin",
+      passwordHash: superAdminPasswordHash,
+      emailVerified: new Date(),
+      isSuperAdmin: true,
+      locale: "en",
+      preference: { create: { locale: "en" } },
+    },
+  });
+
   // ── Users (different roles) ──
   const usersData = [
     { email: "owner@demo.africa", name: "Aminata Diallo", role: "OWNER" as const },
@@ -257,6 +275,7 @@ async function main() {
   });
 
   console.log("Seed complete.");
+  console.log("  Super admin:  superadmin@buildflow.africa / SuperAdmin123!  ->  /en/admin");
   console.log("  Staff login:  owner@demo.africa / Password123!");
   console.log("  Client login: client@demo.africa / Password123!");
 }

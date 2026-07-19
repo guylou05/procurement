@@ -44,13 +44,19 @@ This is a **working foundation plus a vertical slice** of the MVP, not a finishe
 - Settings (org profile, expense approval threshold, per-user language preference)
 - Reports (summary metrics + CSV exports for attendance/expenses/materials)
 - Material requests (item lines, submit → approve/reject workflow)
-- Design system, localized routing, PWA manifest
+- **Platform admin panel** (`/admin`): a super-admin account independent of any
+  organization, gated purely on `User.isSuperAdmin`. Platform-wide stats, the full
+  organization list with member/project counts, org detail, suspend/restore (with its
+  own audit trail), and a platform-wide activity feed. Suspended organizations are
+  denied access immediately, with a clear notice screen for their members.
+- Design system, localized routing, PWA manifest, SEO metadata (per-locale OpenGraph,
+  sitemap, robots), Railway deployment config
 
 Every module in the MVP scope is now implemented end-to-end (schema → service →
 authorization → validation → UI → translations). See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 Deferred/future features (marketplace, logistics, mobile-money execution, payroll, AI,
-native apps, public API) remain documented with hook points in
-[`docs/FUTURE.md`](docs/FUTURE.md).
+native apps, public API, and safe admin impersonation) remain documented with hook
+points in [`docs/FUTURE.md`](docs/FUTURE.md).
 
 **Documented, not built:** marketplace/RFQ, logistics, mobile-money execution, payroll,
 AI, biometric attendance, native apps, public API — see [`docs/FUTURE.md`](docs/FUTURE.md).
@@ -78,13 +84,22 @@ npm run db:seed             # one bilingual demo org
 npm run dev                 # http://localhost:3000
 ```
 
-Demo login (after seeding): `owner@demo.africa` / `Password123!`
+Demo logins (after seeding):
+- Staff: `owner@demo.africa` / `Password123!`
+- Client portal: `client@demo.africa` / `Password123!`
+- Platform super admin (no organization, lands in `/en/admin`): `superadmin@buildflow.africa` / `SuperAdmin123!`
 
 ## Full Docker
 
 ```bash
 docker compose up --build   # app + db + minio
 ```
+
+## Deploy to Railway
+
+See [`docs/DEPLOY_RAILWAY.md`](docs/DEPLOY_RAILWAY.md). `railway.json` builds
+`docker/Dockerfile`; `npm run start:prod` applies pending Prisma migrations before
+serving, and `/api/health` is wired as the healthcheck.
 
 ## Scripts
 
