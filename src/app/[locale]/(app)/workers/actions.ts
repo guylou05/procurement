@@ -10,6 +10,8 @@ import {
   addCertification,
   removeCertification,
 } from "@/server/services/worker";
+import { uploadAttachment } from "@/server/services/attachment";
+import { prisma } from "@/lib/prisma";
 import { recordAudit } from "@/server/audit";
 
 const schema = z.object({
@@ -130,4 +132,28 @@ export async function removeCertificationAction(locale: string, formData: FormDa
   if (!parsed.success) return;
   await removeCertification(ctx, parsed.data.workerId, parsed.data.certId);
   revalidatePath(`/${locale}/workers/${parsed.data.workerId}`);
+}
+
+export async function uploadWorkerDocumentAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "worker:manage");
+  const workerId = String(formData.get("workerId") ?? "");
+  const file = formData.get("document");
+  if (!workerId || !(file instanceof File) || file.size === 0) return;
+
+  const worker = await prisma.worker.findFirst({
+    where: { id: workerId, organizationId: ctx.organizationId, deletedAt: null },
+    select: { id: true },
+  });
+  if (!worker) return;
+
+  const attachment = await uploadAttachment(ctx, file);
+  await prisma.workerDocument.create({
+    data: {
+      workerId,
+      attachmentId: attachment.id,
+      name: String(formData.get("name") ?? "") || file.name,
+    },
+  });
+  revalidatePath(`/${locale}/workers/${workerId}`);
 }

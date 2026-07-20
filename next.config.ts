@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
   experimental: {
-    // Server Actions are enabled by default in Next 15; keep body size modest for photos.
-    serverActions: { bodySizeLimit: "8mb" },
+    // Server Actions handle file uploads; allow headroom above the 15 MB upload cap.
+    serverActions: { bodySizeLimit: "16mb" },
   },
 };
 
