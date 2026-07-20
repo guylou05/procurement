@@ -50,7 +50,8 @@
       "report": "Rapport",
       "more": "Plus"
     },
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "payroll": "Paie"
   },
   "landing": {
     "nav": {
@@ -75,22 +76,58 @@
     "featuresTitle": "Tout ce dont vos équipes de terrain ont besoin, au même endroit",
     "featuresSubtitle": "Remplacez les fils WhatsApp dispersés, les carnets papier et les fichiers Excel par un seul système visible par toute l'entreprise.",
     "features": {
-      "dailyReports": { "title": "Rapports journaliers de chantier", "desc": "Les chefs de chantier consignent les travaux réalisés, les matériaux utilisés et les incidents en moins de trois minutes, depuis n'importe quel téléphone." },
-      "attendance": { "title": "Présence et main-d'œuvre", "desc": "Pointage rapide par ouvrier avec GPS et corrections auditées, pour des coûts de main-d'œuvre toujours exacts." },
-      "projects": { "title": "Projets et budgets", "desc": "Suivez en temps réel le statut, le budget, les jalons et l'avancement de chaque chantier." },
-      "materials": { "title": "Matériaux et inventaire", "desc": "Alertes de stock faible et workflow complet de demande à approbation pour que les chantiers ne manquent de rien." },
-      "expenses": { "title": "Dépenses et approbations", "desc": "Les dépenses de terrain sont automatiquement routées vers le bon approbateur, avec des seuils d'approbation automatique configurables." },
-      "equipment": { "title": "Suivi des équipements", "desc": "Sachez où se trouve chaque équipement, qui l'utilise, et quand la prochaine maintenance est due." },
-      "portal": { "title": "Portail client", "desc": "Offrez à vos clients une vue claire de l'avancement, des jalons et des factures — sans exposer les coûts ou marges internes." },
-      "team": { "title": "Rôles et permissions", "desc": "Propriétaires, chefs de projet, chefs de chantier, comptables et ouvriers voient chacun exactement ce dont ils ont besoin." }
+      "dailyReports": {
+        "title": "Rapports journaliers de chantier",
+        "desc": "Les chefs de chantier consignent les travaux réalisés, les matériaux utilisés et les incidents en moins de trois minutes, depuis n'importe quel téléphone."
+      },
+      "attendance": {
+        "title": "Présence et main-d'œuvre",
+        "desc": "Pointage rapide par ouvrier avec GPS et corrections auditées, pour des coûts de main-d'œuvre toujours exacts."
+      },
+      "projects": {
+        "title": "Projets et budgets",
+        "desc": "Suivez en temps réel le statut, le budget, les jalons et l'avancement de chaque chantier."
+      },
+      "materials": {
+        "title": "Matériaux et inventaire",
+        "desc": "Alertes de stock faible et workflow complet de demande à approbation pour que les chantiers ne manquent de rien."
+      },
+      "expenses": {
+        "title": "Dépenses et approbations",
+        "desc": "Les dépenses de terrain sont automatiquement routées vers le bon approbateur, avec des seuils d'approbation automatique configurables."
+      },
+      "equipment": {
+        "title": "Suivi des équipements",
+        "desc": "Sachez où se trouve chaque équipement, qui l'utilise, et quand la prochaine maintenance est due."
+      },
+      "portal": {
+        "title": "Portail client",
+        "desc": "Offrez à vos clients une vue claire de l'avancement, des jalons et des factures — sans exposer les coûts ou marges internes."
+      },
+      "team": {
+        "title": "Rôles et permissions",
+        "desc": "Propriétaires, chefs de projet, chefs de chantier, comptables et ouvriers voient chacun exactement ce dont ils ont besoin."
+      }
     },
     "howItWorksTitle": "De l'inscription à votre premier rapport de chantier en quelques minutes",
     "howItWorksSubtitle": "Pas de projet d'implémentation, pas de formation — juste une configuration simple que votre équipe peut utiliser dès aujourd'hui.",
     "steps": {
-      "one": { "title": "Créez votre entreprise", "desc": "Définissez votre pays, votre devise et votre langue. L'anglais et le français sont tous deux natifs dès le premier jour." },
-      "two": { "title": "Ajoutez des projets et invitez votre équipe", "desc": "Créez votre premier chantier, invitez chefs de chantier et ouvriers, et attribuez les rôles en quelques minutes." },
-      "three": { "title": "Gérez les opérations quotidiennes", "desc": "Présence, rapports journaliers, matériaux et dépenses — saisis depuis le terrain, sur n'importe quel téléphone." },
-      "four": { "title": "Visualisez tout depuis le tableau de bord", "desc": "La direction obtient une visibilité en temps réel sur chaque chantier, chaque coût, chaque approbation — plus besoin de relancer." }
+      "one": {
+        "title": "Créez votre entreprise",
+        "desc": "Définissez votre pays, votre devise et votre langue. L'anglais et le français sont tous deux natifs dès le premier jour."
+      },
+      "two": {
+        "title": "Ajoutez des projets et invitez votre équipe",
+        "desc": "Créez votre premier chantier, invitez chefs de chantier et ouvriers, et attribuez les rôles en quelques minutes."
+      },
+      "three": {
+        "title": "Gérez les opérations quotidiennes",
+        "desc": "Présence, rapports journaliers, matériaux et dépenses — saisis depuis le terrain, sur n'importe quel téléphone."
+      },
+      "four": {
+        "title": "Visualisez tout depuis le tableau de bord",
+        "desc": "La direction obtient une visibilité en temps réel sur chaque chantier, chaque coût, chaque approbation — plus besoin de relancer."
+      }
     },
     "marketsTitle": "Conçu pour l'Afrique francophone et anglophone",
     "marketsSubtitle": "Devises locales, fuseaux horaires et français des affaires natifs — pas ajoutés après coup. Actuellement configuré pour ces marchés, avec d'autres à venir.",
@@ -329,7 +366,6 @@
     "impersonate": "Voir en tant que cette organisation",
     "impersonateBanner": "Vous consultez {org} en tant qu'administrateur plateforme.",
     "exitImpersonation": "Quitter",
-    "auditLog": "Journal d'audit",
     "viewAuditLog": "Voir le journal d'audit",
     "auditEmpty": "Aucune entrée d'audit pour le moment.",
     "auditColumns": {
@@ -390,7 +426,11 @@
     "accepted": "Vous avez rejoint l'organisation.",
     "inviteInvalid": "Cette invitation est invalide ou a expiré.",
     "signInToAccept": "Connectez-vous ou créez un compte avec {email} pour accepter cette invitation.",
-    "empty": "Aucune invitation en attente."
+    "empty": "Aucune invitation en attente.",
+    "save": "Enregistrer",
+    "remove": "Retirer",
+    "manageMembers": "Gérer",
+    "confirmRemove": "Retirer ce membre ?"
   },
   "settings": {
     "title": "Paramètres",
@@ -761,5 +801,39 @@
     "email": "Saisissez un e-mail valide",
     "minLength": "Trop court",
     "passwordLength": "Le mot de passe doit contenir au moins 8 caractères"
+  },
+  "payroll": {
+    "title": "Paie",
+    "subtitle": "Suivez les revenus du personnel et le statut de paiement.",
+    "addEntry": "Ajouter une paie",
+    "worker": "Ouvrier",
+    "period": "Période (AAAA-MM)",
+    "gross": "Brut",
+    "deductions": "Retenues",
+    "net": "Net",
+    "method": "Méthode",
+    "note": "Note",
+    "record": "Ajouter",
+    "status": "Statut",
+    "paidAt": "Payé le",
+    "actions": "",
+    "markPaid": "Marquer payé",
+    "empty": "Aucune entrée de paie pour le moment.",
+    "grossHint": "Laisser vide pour estimer d'après présence × taux journalier",
+    "totalPaid": "Payé",
+    "totalPending": "En attente",
+    "pendingCount": "Entrées en attente",
+    "statuses": {
+      "PENDING": "En attente",
+      "PAID": "Payé"
+    },
+    "methods": {
+      "CASH": "Espèces",
+      "BANK_TRANSFER": "Virement",
+      "MOBILE_MONEY": "Mobile money",
+      "CARD": "Carte",
+      "CHEQUE": "Chèque",
+      "OTHER": "Autre"
+    }
   }
 }

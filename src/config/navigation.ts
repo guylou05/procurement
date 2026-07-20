@@ -13,6 +13,7 @@ import {
   FileText,
   BarChart3,
   UsersRound,
+  Wallet,
   Settings,
   type LucideIcon,
 } from "lucide-react";
@@ -38,5 +39,6 @@ export const MAIN_NAV: NavItem[] = [
   { href: "/invoices", labelKey: "invoices", icon: FileText },
   { href: "/reports", labelKey: "reports", icon: BarChart3 },
   { href: "/team", labelKey: "team", icon: UsersRound },
+  { href: "/payroll", labelKey: "payroll", icon: Wallet },
   { href: "/settings", labelKey: "settings", icon: Settings },
 ];

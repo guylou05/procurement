@@ -50,7 +50,8 @@
       "report": "Report",
       "more": "More"
     },
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "payroll": "Payroll"
   },
   "landing": {
     "nav": {
@@ -75,22 +76,58 @@
     "featuresTitle": "Everything your field teams need, in one place",
     "featuresSubtitle": "Replace scattered WhatsApp threads, paper notebooks and Excel sheets with one system your whole company can see.",
     "features": {
-      "dailyReports": { "title": "Daily site reports", "desc": "Supervisors log work completed, materials used and issues in under three minutes — from any phone." },
-      "attendance": { "title": "Attendance & labor", "desc": "Fast per-worker check-in with GPS and audited corrections, so labor costs are always accurate." },
-      "projects": { "title": "Projects & budgets", "desc": "Track every job site's status, budget, milestones and completion percentage in real time." },
-      "materials": { "title": "Materials & inventory", "desc": "Low-stock alerts and a full request-to-approval workflow keep job sites supplied." },
-      "expenses": { "title": "Expenses & approvals", "desc": "Field expenses route to the right approver automatically, with configurable auto-approval thresholds." },
-      "equipment": { "title": "Equipment tracking", "desc": "Know where every asset is, who has it, and when it's due for maintenance." },
-      "portal": { "title": "Client portal", "desc": "Give clients a clean view of progress, milestones and invoices — without exposing internal costs or margins." },
-      "team": { "title": "Roles & permissions", "desc": "Owners, project managers, supervisors, accountants and field workers each see exactly what they need." }
+      "dailyReports": {
+        "title": "Daily site reports",
+        "desc": "Supervisors log work completed, materials used and issues in under three minutes — from any phone."
+      },
+      "attendance": {
+        "title": "Attendance & labor",
+        "desc": "Fast per-worker check-in with GPS and audited corrections, so labor costs are always accurate."
+      },
+      "projects": {
+        "title": "Projects & budgets",
+        "desc": "Track every job site's status, budget, milestones and completion percentage in real time."
+      },
+      "materials": {
+        "title": "Materials & inventory",
+        "desc": "Low-stock alerts and a full request-to-approval workflow keep job sites supplied."
+      },
+      "expenses": {
+        "title": "Expenses & approvals",
+        "desc": "Field expenses route to the right approver automatically, with configurable auto-approval thresholds."
+      },
+      "equipment": {
+        "title": "Equipment tracking",
+        "desc": "Know where every asset is, who has it, and when it's due for maintenance."
+      },
+      "portal": {
+        "title": "Client portal",
+        "desc": "Give clients a clean view of progress, milestones and invoices — without exposing internal costs or margins."
+      },
+      "team": {
+        "title": "Roles & permissions",
+        "desc": "Owners, project managers, supervisors, accountants and field workers each see exactly what they need."
+      }
     },
     "howItWorksTitle": "From sign-up to your first site report in minutes",
     "howItWorksSubtitle": "No implementation project, no training course — just a simple setup your team can start using today.",
     "steps": {
-      "one": { "title": "Create your company", "desc": "Set your country, currency and language. English and French are both first-class from day one." },
-      "two": { "title": "Add projects & invite your team", "desc": "Create your first job site, invite supervisors and workers, and assign roles in minutes." },
-      "three": { "title": "Run daily operations", "desc": "Attendance, daily reports, materials and expenses — captured from the field, on any phone." },
-      "four": { "title": "See it all from the dashboard", "desc": "Management gets live visibility into every site, every cost, every approval — no more chasing updates." }
+      "one": {
+        "title": "Create your company",
+        "desc": "Set your country, currency and language. English and French are both first-class from day one."
+      },
+      "two": {
+        "title": "Add projects & invite your team",
+        "desc": "Create your first job site, invite supervisors and workers, and assign roles in minutes."
+      },
+      "three": {
+        "title": "Run daily operations",
+        "desc": "Attendance, daily reports, materials and expenses — captured from the field, on any phone."
+      },
+      "four": {
+        "title": "See it all from the dashboard",
+        "desc": "Management gets live visibility into every site, every cost, every approval — no more chasing updates."
+      }
     },
     "marketsTitle": "Built for Francophone and Anglophone Africa",
     "marketsSubtitle": "Local currencies, time zones and business French built in — not bolted on. Currently configured for these markets, with more added over time.",
@@ -329,7 +366,6 @@
     "impersonate": "View as this org",
     "impersonateBanner": "You are viewing {org} as a platform admin.",
     "exitImpersonation": "Exit",
-    "auditLog": "Audit log",
     "viewAuditLog": "View audit log",
     "auditEmpty": "No audit entries yet.",
     "auditColumns": {
@@ -390,7 +426,11 @@
     "accepted": "You have joined the organization.",
     "inviteInvalid": "This invitation is invalid or has expired.",
     "signInToAccept": "Sign in or create an account with {email} to accept this invitation.",
-    "empty": "No pending invitations."
+    "empty": "No pending invitations.",
+    "save": "Save",
+    "remove": "Remove",
+    "manageMembers": "Manage",
+    "confirmRemove": "Remove this member?"
   },
   "settings": {
     "title": "Settings",
@@ -761,5 +801,39 @@
     "email": "Enter a valid email",
     "minLength": "Too short",
     "passwordLength": "Password must be at least 8 characters"
+  },
+  "payroll": {
+    "title": "Payroll",
+    "subtitle": "Track staff income and payment status.",
+    "addEntry": "Add pay entry",
+    "worker": "Worker",
+    "period": "Period (YYYY-MM)",
+    "gross": "Gross",
+    "deductions": "Deductions",
+    "net": "Net",
+    "method": "Method",
+    "note": "Note",
+    "record": "Add",
+    "status": "Status",
+    "paidAt": "Paid on",
+    "actions": "",
+    "markPaid": "Mark paid",
+    "empty": "No payroll entries yet.",
+    "grossHint": "Leave blank to estimate from attendance × daily rate",
+    "totalPaid": "Paid",
+    "totalPending": "Pending",
+    "pendingCount": "Pending entries",
+    "statuses": {
+      "PENDING": "Pending",
+      "PAID": "Paid"
+    },
+    "methods": {
+      "CASH": "Cash",
+      "BANK_TRANSFER": "Bank transfer",
+      "MOBILE_MONEY": "Mobile money",
+      "CARD": "Card",
+      "CHEQUE": "Cheque",
+      "OTHER": "Other"
+    }
   }
 }
