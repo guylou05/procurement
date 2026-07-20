@@ -719,7 +719,20 @@
     "phone": "Téléphone",
     "whatsapp": "WhatsApp",
     "projects": "Projets",
-    "empty": "Aucun client pour le moment. Ajoutez des clients pour les lier aux projets et factures."
+    "empty": "Aucun client pour le moment. Ajoutez des clients pour les lier aux projets et factures.",
+    "edit": "Modifier le client",
+    "save": "Enregistrer",
+    "profile": "Profil",
+    "billingAddress": "Adresse de facturation",
+    "notes": "Notes",
+    "totalInvoiced": "Total facturé",
+    "totalPaid": "Total payé",
+    "outstanding": "Restant dû",
+    "invoices": "Factures",
+    "noInvoices": "Aucune facture pour le moment.",
+    "noProjects": "Aucun projet pour le moment.",
+    "paid": "payé",
+    "contact": "Contact"
   },
   "issue": {
     "title": "Incidents",
