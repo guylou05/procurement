@@ -258,6 +258,8 @@
       "reviewNoteLabel": "Reviewer note",
       "photos": "Site photos",
       "noPhotos": "No photos attached.",
+      "addPhoto": "Add photo",
+      "upload": "Upload",
       "comments": "Comments",
       "addComment": "Add a comment",
       "post": "Post",
@@ -474,7 +476,10 @@
       "valid": "Valid",
       "noCerts": "No certifications recorded.",
       "documents": "Documents",
-      "noDocuments": "No documents uploaded."
+      "noDocuments": "No documents uploaded.",
+      "docName": "Document name",
+      "uploadDocument": "Upload document",
+      "upload": "Upload"
     },
     "types": {
       "PERMANENT": "Permanent",

@@ -14,6 +14,7 @@ import {
   reviewDailyReportAction,
   addReportCommentAction,
   submitDraftReportAction,
+  uploadReportPhotoAction,
 } from "../actions";
 
 export default async function DailyReportDetailPage({
@@ -36,6 +37,7 @@ export default async function DailyReportDetailPage({
   const review = reviewDailyReportAction.bind(null, locale);
   const comment = addReportCommentAction.bind(null, locale);
   const submit = submitDraftReportAction.bind(null, locale);
+  const uploadPhoto = uploadReportPhotoAction.bind(null, locale);
 
   const siteRows = [
     { label: t("weather"), value: report.weather },
@@ -170,18 +172,46 @@ export default async function DailyReportDetailPage({
         <CardHeader>
           <CardTitle className="text-base">{td("photos")}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           {report.photos.length === 0 ? (
             <p className="text-sm text-muted-foreground">{td("noPhotos")}</p>
           ) : (
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
               {report.photos.map((p) => (
-                <span key={p.id} className="rounded-md border bg-muted px-2 py-1 text-xs">
-                  {p.caption ?? p.id.slice(0, 8)}
-                </span>
+                <a
+                  key={p.id}
+                  href={`/api/files/${p.attachmentId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group block overflow-hidden rounded-md border"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/api/files/${p.attachmentId}`}
+                    alt={p.caption ?? ""}
+                    className="aspect-square w-full object-cover transition group-hover:opacity-90"
+                  />
+                  {p.caption ? <p className="truncate p-1 text-xs">{p.caption}</p> : null}
+                </a>
               ))}
             </div>
           )}
+          {canSubmit ? (
+            <form action={uploadPhoto} className="flex flex-wrap items-center gap-2 border-t pt-3">
+              <input type="hidden" name="id" value={report.id} />
+              <input
+                type="file"
+                name="photo"
+                accept="image/jpeg,image/png,image/webp"
+                required
+                className="text-sm"
+              />
+              <Input name="caption" placeholder={td("addPhoto")} className="h-9 max-w-xs" />
+              <Button type="submit" variant="outline" size="sm">
+                {td("upload")}
+              </Button>
+            </form>
+          ) : null}
         </CardContent>
       </Card>
 

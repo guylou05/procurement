@@ -10,8 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { formatMoney } from "@/lib/money";
 import { formatDate } from "@/lib/utils";
-import { Pencil, Plus, X, Percent, CalendarCheck, Wallet, ShieldCheck } from "lucide-react";
-import { addCertificationAction, removeCertificationAction } from "../actions";
+import { Pencil, Plus, X, Percent, CalendarCheck, Wallet, ShieldCheck, FileText } from "lucide-react";
+import {
+  addCertificationAction,
+  removeCertificationAction,
+  uploadWorkerDocumentAction,
+} from "../actions";
 
 export default async function WorkerHubPage({
   params,
@@ -35,6 +39,7 @@ export default async function WorkerHubPage({
 
   const addCert = addCertificationAction.bind(null, locale);
   const removeCert = removeCertificationAction.bind(null, locale);
+  const uploadDoc = uploadWorkerDocumentAction.bind(null, locale);
 
   const kpis = [
     { label: th("attendanceRate"), value: `${summary.attendanceRate}%`, icon: Percent },
@@ -235,18 +240,41 @@ export default async function WorkerHubPage({
         <CardHeader>
           <CardTitle className="text-base">{th("documents")}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           {worker.documents.length === 0 ? (
             <p className="text-sm text-muted-foreground">{th("noDocuments")}</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {worker.documents.map((doc) => (
-                <span key={doc.id} className="rounded-md border bg-muted px-2 py-1 text-xs">
+                <a
+                  key={doc.id}
+                  href={`/api/files/${doc.attachmentId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-xs hover:bg-muted/70"
+                >
+                  <FileText className="size-3" />
                   {doc.name}
-                </span>
+                </a>
               ))}
             </div>
           )}
+          {canManage ? (
+            <form action={uploadDoc} className="flex flex-wrap items-center gap-2 border-t pt-3">
+              <input type="hidden" name="workerId" value={worker.id} />
+              <input
+                type="file"
+                name="document"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                required
+                className="text-sm"
+              />
+              <Input name="name" placeholder={th("docName")} className="h-9 max-w-xs" />
+              <Button type="submit" variant="outline" size="sm">
+                {th("upload")}
+              </Button>
+            </form>
+          ) : null}
         </CardContent>
       </Card>
     </div>

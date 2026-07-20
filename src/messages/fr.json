@@ -258,6 +258,8 @@
       "reviewNoteLabel": "Note du relecteur",
       "photos": "Photos du chantier",
       "noPhotos": "Aucune photo jointe.",
+      "addPhoto": "Ajouter une photo",
+      "upload": "Téléverser",
       "comments": "Commentaires",
       "addComment": "Ajouter un commentaire",
       "post": "Publier",
@@ -474,7 +476,10 @@
       "valid": "Valide",
       "noCerts": "Aucune certification enregistrée.",
       "documents": "Documents",
-      "noDocuments": "Aucun document téléversé."
+      "noDocuments": "Aucun document téléversé.",
+      "docName": "Nom du document",
+      "uploadDocument": "Téléverser un document",
+      "upload": "Téléverser"
     },
     "types": {
       "PERMANENT": "Permanent",

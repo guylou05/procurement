@@ -10,6 +10,8 @@ import {
   addReportComment,
   submitDraftReport,
 } from "@/server/services/daily-report";
+import { uploadAttachment } from "@/server/services/attachment";
+import { prisma } from "@/lib/prisma";
 
 const createSchema = z.object({
   projectId: z.string().min(1),
@@ -104,4 +106,25 @@ export async function submitDraftReportAction(locale: string, formData: FormData
   await submitDraftReport(ctx, parsed.data.id);
   revalidatePath(`/${locale}/daily-reports`);
   revalidatePath(`/${locale}/daily-reports/${parsed.data.id}`);
+}
+
+export async function uploadReportPhotoAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "report:submit");
+  const reportId = String(formData.get("id") ?? "");
+  const file = formData.get("photo");
+  if (!reportId || !(file instanceof File) || file.size === 0) return;
+
+  // Verify the report belongs to this org before attaching.
+  const report = await prisma.dailyReport.findFirst({
+    where: { id: reportId, organizationId: ctx.organizationId },
+    select: { id: true },
+  });
+  if (!report) return;
+
+  const attachment = await uploadAttachment(ctx, file);
+  await prisma.dailyReportPhoto.create({
+    data: { reportId, attachmentId: attachment.id, caption: String(formData.get("caption") ?? "") || null },
+  });
+  revalidatePath(`/${locale}/daily-reports/${reportId}`);
 }
