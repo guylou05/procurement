@@ -44,6 +44,8 @@ const txnSchema = z.object({
   ]),
   quantity: z.coerce.number().positive(),
   projectId: z.string().optional(),
+  counterparty: z.string().optional(),
+  approvedById: z.string().optional(),
   reason: z.string().optional(),
 });
 
@@ -62,6 +64,8 @@ export async function recordTransactionAction(
     type: parsed.data.type,
     quantity: parsed.data.quantity,
     projectId: parsed.data.projectId || undefined,
+    counterparty: parsed.data.counterparty,
+    approvedById: parsed.data.approvedById || undefined,
     reason: parsed.data.reason,
   });
   revalidatePath(`/${locale}/materials`);

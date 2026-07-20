@@ -787,7 +787,10 @@ model MaterialTransaction {
   reason         String?
   attachmentId   String?
   note           String?
-  userId         String?
+  userId         String? // who recorded the movement
+  counterparty   String? // who took it out / brought it in (worker, supplier, etc.)
+  approvedById   String? // org member who approved the movement
+  approvedAt     DateTime?
   createdAt      DateTime        @default(now())
 
   organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
