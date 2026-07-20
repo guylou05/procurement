@@ -192,6 +192,26 @@ async function main() {
     workers.push(w);
   }
 
+  // ── Payroll (previous month, mixed paid/pending) ──
+  await prisma.payrollEntry.deleteMany({ where: { organizationId: org.id } });
+  const prevMonth = new Date();
+  prevMonth.setUTCMonth(prevMonth.getUTCMonth() - 1);
+  const period = prevMonth.toISOString().slice(0, 7);
+  for (const [i, w] of workers.entries()) {
+    const gross = 8000 * (18 + i); // ~ days worked × daily rate
+    const deductions = i === 0 ? 5000 : 0;
+    await prisma.payrollEntry.create({
+      data: {
+        organizationId: org.id, workerId: w.id, periodLabel: period,
+        grossMinor: gross, deductionsMinor: deductions, netMinor: gross - deductions, currency: "XAF",
+        status: i < 2 ? "PAID" : "PENDING",
+        method: i < 2 ? "MOBILE_MONEY" : null,
+        paidAt: i < 2 ? new Date(Date.now() - 5 * 864e5) : null,
+        createdById: owner.id,
+      },
+    });
+  }
+
   // ── Attendance today (residential) ──
   const today = new Date(); today.setHours(0, 0, 0, 0);
   for (const [i, w] of workers.entries()) {

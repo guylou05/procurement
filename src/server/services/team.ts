@@ -15,6 +15,44 @@ export async function listMembers(ctx: TenantContext) {
   });
 }
 
+/** Changes a member's role. Refuses to demote the organization's last owner. */
+export async function updateMemberRole(ctx: TenantContext, memberId: string, role: Role) {
+  const member = await prisma.organizationMember.findFirst({
+    where: { id: memberId, organizationId: ctx.organizationId },
+    select: { id: true, role: true },
+  });
+  if (!member) throw new Error("Member not found in organization");
+
+  if (member.role === "OWNER" && role !== "OWNER") {
+    const owners = await prisma.organizationMember.count({
+      where: { organizationId: ctx.organizationId, role: "OWNER" },
+    });
+    if (owners <= 1) throw new Error("Cannot demote the last owner");
+  }
+
+  await prisma.organizationMember.update({ where: { id: memberId }, data: { role } });
+}
+
+/** Removes a member. Refuses to remove the last owner. */
+export async function removeMember(ctx: TenantContext, memberId: string) {
+  const member = await prisma.organizationMember.findFirst({
+    where: { id: memberId, organizationId: ctx.organizationId },
+    select: { id: true, role: true },
+  });
+  if (!member) throw new Error("Member not found in organization");
+
+  if (member.role === "OWNER") {
+    const owners = await prisma.organizationMember.count({
+      where: { organizationId: ctx.organizationId, role: "OWNER" },
+    });
+    if (owners <= 1) throw new Error("Cannot remove the last owner");
+  }
+
+  await prisma.organizationMember.deleteMany({
+    where: { id: memberId, organizationId: ctx.organizationId },
+  });
+}
+
 export async function listInvitations(ctx: TenantContext) {
   return prisma.invitation.findMany({
     where: { organizationId: ctx.organizationId, status: "PENDING" },

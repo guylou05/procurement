@@ -5,8 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
+import { X } from "lucide-react";
 import { InviteForm } from "./invite-form";
-import { revokeInvitationAction } from "./actions";
+import { revokeInvitationAction, updateMemberRoleAction, removeMemberAction } from "./actions";
+
+const ROLES = ["OWNER", "ADMIN", "PROJECT_MANAGER", "SUPERVISOR", "WORKER", "ACCOUNTANT", "CLIENT"] as const;
 
 export default async function TeamPage({
   params,
@@ -21,6 +24,8 @@ export default async function TeamPage({
   const [members, invitations] = await Promise.all([listMembers(ctx), listInvitations(ctx)]);
   const canManage = can(ctx, "org:members");
   const revoke = revokeInvitationAction.bind(null, locale);
+  const setRole = updateMemberRoleAction.bind(null, locale);
+  const removeMbr = removeMemberAction.bind(null, locale);
   const appUrl = process.env.APP_URL ?? "";
 
   return (
@@ -50,6 +55,7 @@ export default async function TeamPage({
                   <th className="px-4 py-3 font-medium">{t("name")}</th>
                   <th className="px-4 py-3 font-medium">{t("email")}</th>
                   <th className="px-4 py-3 font-medium">{t("role")}</th>
+                  {canManage ? <th className="px-4 py-3 font-medium"></th> : null}
                 </tr>
               </thead>
               <tbody>
@@ -58,8 +64,44 @@ export default async function TeamPage({
                     <td className="px-4 py-3 font-medium">{m.user.name ?? "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground">{m.user.email}</td>
                     <td className="px-4 py-3">
-                      <Badge tone="primary">{tr(m.role)}</Badge>
+                      {canManage ? (
+                        <form action={setRole} className="flex items-center gap-2">
+                          <input type="hidden" name="id" value={m.id} />
+                          <select
+                            name="role"
+                            defaultValue={m.role}
+                            className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+                          >
+                            {ROLES.map((r) => (
+                              <option key={r} value={r}>
+                                {tr(r)}
+                              </option>
+                            ))}
+                          </select>
+                          <Button type="submit" size="sm" variant="outline">
+                            {t("save")}
+                          </Button>
+                        </form>
+                      ) : (
+                        <Badge tone="primary">{tr(m.role)}</Badge>
+                      )}
                     </td>
+                    {canManage ? (
+                      <td className="px-4 py-3 text-right">
+                        {m.userId !== ctx.userId ? (
+                          <form action={removeMbr}>
+                            <input type="hidden" name="id" value={m.id} />
+                            <button
+                              type="submit"
+                              className="text-muted-foreground hover:text-destructive"
+                              title={t("remove")}
+                            >
+                              <X className="size-4" />
+                            </button>
+                          </form>
+                        ) : null}
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
