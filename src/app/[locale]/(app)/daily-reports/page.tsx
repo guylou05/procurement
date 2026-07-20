@@ -52,8 +52,16 @@ export default async function DailyReportsPage({
               <tbody>
                 {reports.map((r) => (
                   <tr key={r.id} className="border-b last:border-0 hover:bg-muted/30">
-                    <td className="px-4 py-3">{formatDate(r.date, locale)}</td>
-                    <td className="px-4 py-3 font-medium">{r.project.name}</td>
+                    <td className="px-4 py-3">
+                      <Link href={`/daily-reports/${r.id}`} className="hover:underline">
+                        {formatDate(r.date, locale)}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 font-medium">
+                      <Link href={`/daily-reports/${r.id}`} className="hover:underline">
+                        {r.project.name}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3">{r.workersPresent}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={r.status} label={ts(r.status)} />

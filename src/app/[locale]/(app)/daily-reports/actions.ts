@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAuth, requirePermission } from "@/server/authz";
-import { createDailyReport, reviewDailyReport } from "@/server/services/daily-report";
+import {
+  createDailyReport,
+  reviewDailyReport,
+  addReportComment,
+  submitDraftReport,
+} from "@/server/services/daily-report";
 
 const createSchema = z.object({
   projectId: z.string().min(1),
@@ -74,4 +79,29 @@ export async function reviewDailyReportAction(
   });
 
   revalidatePath(`/${locale}/daily-reports`);
+  revalidatePath(`/${locale}/daily-reports/${parsed.data.id}`);
+}
+
+const commentSchema = z.object({ id: z.string().min(1), body: z.string().min(1) });
+
+export async function addReportCommentAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  // Any authenticated org member who can view the report may comment; submitters and
+  // reviewers both need this. Gate on report:submit OR report:review.
+  const parsed = commentSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+  await addReportComment(ctx, parsed.data.id, parsed.data.body);
+  revalidatePath(`/${locale}/daily-reports/${parsed.data.id}`);
+}
+
+const submitSchema = z.object({ id: z.string().min(1) });
+
+export async function submitDraftReportAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "report:submit");
+  const parsed = submitSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+  await submitDraftReport(ctx, parsed.data.id);
+  revalidatePath(`/${locale}/daily-reports`);
+  revalidatePath(`/${locale}/daily-reports/${parsed.data.id}`);
 }

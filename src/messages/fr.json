@@ -246,6 +246,26 @@
       "REJECTED": "Rejeté",
       "CHANGES_REQUESTED": "Modifications demandées"
     },
+    "detail": {
+      "supervisor": "Chef de chantier",
+      "reviewedBy": "Revu par",
+      "submit": "Soumettre pour revue",
+      "review": "Revue",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "requestChanges": "Demander des modifications",
+      "reviewNote": "Note (facultatif)",
+      "reviewNoteLabel": "Note du relecteur",
+      "photos": "Photos du chantier",
+      "noPhotos": "Aucune photo jointe.",
+      "comments": "Commentaires",
+      "addComment": "Ajouter un commentaire",
+      "post": "Publier",
+      "noComments": "Aucun commentaire pour le moment.",
+      "site": "Conditions du chantier",
+      "work": "Travaux",
+      "problems": "Problèmes"
+    },
     "empty": "Aucun rapport journalier pour le moment."
   },
   "attendance": {

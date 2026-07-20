@@ -246,6 +246,26 @@
       "REJECTED": "Rejected",
       "CHANGES_REQUESTED": "Changes requested"
     },
+    "detail": {
+      "supervisor": "Supervisor",
+      "reviewedBy": "Reviewed by",
+      "submit": "Submit for review",
+      "review": "Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "requestChanges": "Request changes",
+      "reviewNote": "Note (optional)",
+      "reviewNoteLabel": "Reviewer note",
+      "photos": "Site photos",
+      "noPhotos": "No photos attached.",
+      "comments": "Comments",
+      "addComment": "Add a comment",
+      "post": "Post",
+      "noComments": "No comments yet.",
+      "site": "Site conditions",
+      "work": "Work",
+      "problems": "Problems"
+    },
     "empty": "No daily reports yet."
   },
   "attendance": {
