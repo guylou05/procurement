@@ -734,6 +734,20 @@
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
     },
+    "board": "Board",
+    "list": "List",
+    "edit": "Edit",
+    "save": "Save",
+    "unassigned": "Unassigned",
+    "assignee": "Assignee",
+    "details": "Details",
+    "checklist": "Checklist",
+    "addChecklistItem": "Add checklist item",
+    "comments": "Comments",
+    "addComment": "Add a comment",
+    "post": "Post",
+    "noComments": "No comments yet.",
+    "noChecklist": "No checklist items.",
     "empty": "No tasks yet."
   },
   "validation": {
