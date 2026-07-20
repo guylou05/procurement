@@ -636,7 +636,22 @@
       "REJECTED": "Rejeté",
       "REIMBURSED": "Remboursé"
     },
-    "empty": "Aucune dépense pour le moment."
+    "empty": "Aucune dépense pour le moment.",
+    "detail": "Détails",
+    "submit": "Soumettre pour approbation",
+    "markReimbursed": "Marquer remboursé",
+    "approvedBy": "Approuvé par",
+    "approvedOn": "Approuvé le",
+    "receipt": "Reçu",
+    "noReceipt": "Aucun reçu joint.",
+    "uploadReceipt": "Téléverser un reçu",
+    "upload": "Téléverser",
+    "reviewNote": "Motif (si rejet)",
+    "review": "Revue",
+    "rejectedReason": "Motif du rejet",
+    "viewReceipt": "Voir le reçu",
+    "back": "Dépenses",
+    "status": "Statut"
   },
   "equipment": {
     "title": "Équipements",

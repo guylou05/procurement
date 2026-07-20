@@ -636,7 +636,22 @@
       "REJECTED": "Rejected",
       "REIMBURSED": "Reimbursed"
     },
-    "empty": "No expenses yet."
+    "empty": "No expenses yet.",
+    "detail": "Details",
+    "submit": "Submit for approval",
+    "markReimbursed": "Mark reimbursed",
+    "approvedBy": "Approved by",
+    "approvedOn": "Approved on",
+    "receipt": "Receipt",
+    "noReceipt": "No receipt attached.",
+    "uploadReceipt": "Upload receipt",
+    "upload": "Upload",
+    "reviewNote": "Reason (if rejecting)",
+    "review": "Review",
+    "rejectedReason": "Rejection reason",
+    "viewReceipt": "View receipt",
+    "back": "Expenses",
+    "status": "Status"
   },
   "equipment": {
     "title": "Equipment",
