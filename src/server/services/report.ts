@@ -46,6 +46,110 @@ export async function reportSummary(ctx: TenantContext) {
   };
 }
 
+export interface TrendPoint {
+  label: string;
+  value: number;
+}
+
+function startOfWeek(d: Date): Date {
+  const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const day = (x.getUTCDay() + 6) % 7;
+  x.setUTCDate(x.getUTCDate() - day);
+  return x;
+}
+
+function weeklyBuckets(weeks: number): { start: number; label: string; value: number }[] {
+  const thisWeek = startOfWeek(new Date());
+  const buckets: { start: number; label: string; value: number }[] = [];
+  for (let i = weeks - 1; i >= 0; i--) {
+    const start = new Date(thisWeek);
+    start.setUTCDate(start.getUTCDate() - i * 7);
+    buckets.push({
+      start: start.getTime(),
+      label: start.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }),
+      value: 0,
+    });
+  }
+  return buckets;
+}
+
+function bucketBy<T>(rows: T[], date: (r: T) => Date, amount: (r: T) => number, weeks: number): TrendPoint[] {
+  const buckets = weeklyBuckets(weeks);
+  for (const r of rows) {
+    const ws = startOfWeek(date(r)).getTime();
+    const b = buckets.find((x) => x.start === ws);
+    if (b) b.value += amount(r);
+  }
+  return buckets.map((b) => ({ label: b.label, value: b.value }));
+}
+
+/**
+ * Tenant analytics for the reports/analytics view: weekly spend and attendance trends,
+ * spend by category and by project, and budget-vs-actual per active project. All
+ * tenant-scoped and computed in JS (database-agnostic), mirroring the admin analytics.
+ */
+export async function getTenantAnalytics(ctx: TenantContext, weeks = 8) {
+  const org = ctx.organizationId;
+  const since = new Date();
+  since.setUTCDate(since.getUTCDate() - weeks * 7);
+
+  const [expenses, attendance, projects] = await Promise.all([
+    prisma.expense.findMany({
+      where: { organizationId: org, status: "APPROVED" },
+      include: { category: { select: { name: true } }, project: { select: { id: true, name: true } } },
+    }),
+    prisma.attendanceRecord.findMany({
+      where: {
+        organizationId: org,
+        date: { gte: since },
+        status: { in: ["PRESENT", "LATE", "OVERTIME", "HALF_DAY"] },
+      },
+      select: { date: true },
+    }),
+    prisma.project.findMany({
+      where: { organizationId: org, deletedAt: null, status: { in: ["ACTIVE", "DELAYED", "ON_HOLD"] } },
+      select: { id: true, name: true, budgetMinor: true, currency: true },
+    }),
+  ]);
+
+  const recentExpenses = expenses.filter((e) => e.date >= since);
+  const spendTrend = bucketBy(recentExpenses, (e) => e.date, (e) => e.amountMinor, weeks);
+  const attendanceTrend = bucketBy(attendance, (a) => a.date, () => 1, weeks);
+
+  const byCategory = new Map<string, number>();
+  const byProject = new Map<string, { name: string; minor: number }>();
+  const spentByProjectId = new Map<string, number>();
+  for (const e of expenses) {
+    const cat = e.category?.name ?? "Uncategorized";
+    byCategory.set(cat, (byCategory.get(cat) ?? 0) + e.amountMinor);
+    if (e.project) {
+      const cur = byProject.get(e.project.id) ?? { name: e.project.name, minor: 0 };
+      cur.minor += e.amountMinor;
+      byProject.set(e.project.id, cur);
+      spentByProjectId.set(e.project.id, (spentByProjectId.get(e.project.id) ?? 0) + e.amountMinor);
+    }
+  }
+
+  const currency = ctx.organization.currency;
+  return {
+    currency,
+    spendTrend,
+    attendanceTrend,
+    expensesByCategory: Array.from(byCategory.entries())
+      .map(([name, minor]) => ({ name, minor }))
+      .sort((a, b) => b.minor - a.minor),
+    expensesByProject: Array.from(byProject.values()).sort((a, b) => b.minor - a.minor),
+    budgetVsActual: projects
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        budgetMinor: p.budgetMinor,
+        spentMinor: spentByProjectId.get(p.id) ?? 0,
+      }))
+      .sort((a, b) => b.budgetMinor - a.budgetMinor),
+  };
+}
+
 /** Builds CSV rows for a given export type. Returns headers + rows of strings. */
 export async function buildExport(
   ctx: TenantContext,

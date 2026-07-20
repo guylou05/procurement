@@ -418,7 +418,18 @@
     "approvedExpenses": "Approved expenses",
     "pendingExpenses": "Pending expenses",
     "lowStockItems": "Low-stock items",
-    "inventoryValue": "Inventory value"
+    "inventoryValue": "Inventory value",
+    "analytics": "Analytics",
+    "last8Weeks": "Last 8 weeks",
+    "spendTrend": "Approved spend",
+    "attendanceTrend": "Worker-days",
+    "spendByCategory": "Spend by category",
+    "spendByProject": "Spend by project",
+    "budgetVsActual": "Budget vs actual",
+    "noData": "No data yet.",
+    "budget": "Budget",
+    "spent": "Spent",
+    "exportsTitle": "Exports"
   },
   "worker": {
     "title": "Workers",

@@ -418,7 +418,18 @@
     "approvedExpenses": "Dépenses approuvées",
     "pendingExpenses": "Dépenses en attente",
     "lowStockItems": "Articles en stock faible",
-    "inventoryValue": "Valeur du stock"
+    "inventoryValue": "Valeur du stock",
+    "analytics": "Analytique",
+    "last8Weeks": "8 dernières semaines",
+    "spendTrend": "Dépenses approuvées",
+    "attendanceTrend": "Jours-ouvriers",
+    "spendByCategory": "Dépenses par catégorie",
+    "spendByProject": "Dépenses par projet",
+    "budgetVsActual": "Budget vs réel",
+    "noData": "Aucune donnée pour le moment.",
+    "budget": "Budget",
+    "spent": "Dépensé",
+    "exportsTitle": "Exports"
   },
   "worker": {
     "title": "Ouvriers",

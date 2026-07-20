@@ -5,7 +5,7 @@
 export function BarList({
   items,
 }: {
-  items: { label: string; value: number; hint?: string; href?: string }[];
+  items: { label: string; value: number; hint?: string; href?: string; display?: string }[];
 }) {
   const max = Math.max(1, ...items.map((i) => i.value));
 
@@ -16,8 +16,7 @@ export function BarList({
           <div className="flex items-center justify-between text-sm">
             <span className="truncate font-medium">{item.label}</span>
             <span className="ml-2 shrink-0 text-muted-foreground">
-              {item.value}
-              {item.hint ? ` ${item.hint}` : ""}
+              {item.display ?? `${item.value}${item.hint ? ` ${item.hint}` : ""}`}
             </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
