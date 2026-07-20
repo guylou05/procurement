@@ -255,6 +255,36 @@ async function main() {
     ],
   });
 
+  // ── Materials + stock transactions ──
+  await prisma.materialTransaction.deleteMany({ where: { organizationId: org.id } });
+  await prisma.material.deleteMany({ where: { organizationId: org.id } });
+  const materialsSeed = [
+    { name: "Ciment CEM II 42.5", sku: "MAT-CIM", unit: "sac", supplier: "Cimencam", unitCostMinor: 5500, quantity: 320, minQuantity: 100 },
+    { name: "Fer à béton 12mm", sku: "MAT-FE12", unit: "barre", supplier: "Aciers du Cameroun", unitCostMinor: 4200, quantity: 90, minQuantity: 120 },
+    { name: "Sable fin", sku: "MAT-SAB", unit: "m³", supplier: "Carrière Nkolbisson", unitCostMinor: 12000, quantity: 45, minQuantity: 20 },
+    { name: "Parpaing 20x20x40", sku: "MAT-PAR", unit: "unité", supplier: "Préfa Douala", unitCostMinor: 350, quantity: 1500, minQuantity: 500 },
+  ];
+  for (const m of materialsSeed) {
+    const material = await prisma.material.create({
+      data: { organizationId: org.id, currency: "XAF", ...m },
+    });
+    // A couple of movements so the ledger and usage-by-project are populated.
+    await prisma.materialTransaction.create({
+      data: {
+        organizationId: org.id, materialId: material.id, type: "RECEIVE",
+        quantity: 100, unit: m.unit, reason: "Réapprovisionnement", userId: pm.id,
+        createdAt: new Date(Date.now() - 6 * 864e5),
+      },
+    });
+    await prisma.materialTransaction.create({
+      data: {
+        organizationId: org.id, materialId: material.id, projectId: residential.id, type: "ISSUE",
+        quantity: 40, unit: m.unit, reason: "Sortie chantier", userId: foreman.id,
+        createdAt: new Date(Date.now() - 2 * 864e5),
+      },
+    });
+  }
+
   // ── Invoice + payment (visible in the client portal) ──
   await prisma.invoice.deleteMany({ where: { organizationId: org.id } });
   await prisma.invoice.create({

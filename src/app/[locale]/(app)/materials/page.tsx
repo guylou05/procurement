@@ -60,7 +60,9 @@ export default async function MaterialsPage({
                   <tr key={m.id} className="border-b last:border-0 hover:bg-muted/30">
                     <td className="px-4 py-3 font-medium">
                       <div className="flex items-center gap-2">
-                        {m.name}
+                        <Link href={`/materials/${m.id}`} className="hover:underline">
+                          {m.name}
+                        </Link>
                         {isLowStock(m) ? (
                           <Badge tone="danger">{t("lowStock")}</Badge>
                         ) : null}
