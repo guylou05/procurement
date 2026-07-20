@@ -60,8 +60,16 @@ export default async function ExpensesPage({
               <tbody>
                 {expenses.map((e) => (
                   <tr key={e.id} className="border-b last:border-0 hover:bg-muted/30">
-                    <td className="px-4 py-3">{formatDate(e.date, locale)}</td>
-                    <td className="px-4 py-3 font-medium">{e.vendor ?? "—"}</td>
+                    <td className="px-4 py-3">
+                      <Link href={`/expenses/${e.id}`} className="hover:underline">
+                        {formatDate(e.date, locale)}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 font-medium">
+                      <Link href={`/expenses/${e.id}`} className="hover:underline">
+                        {e.vendor ?? "—"}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">{e.project?.name ?? "—"}</td>
                     <td className="px-4 py-3">{formatMoney(e.amountMinor, e.currency, locale)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{tm(e.paymentMethod)}</td>

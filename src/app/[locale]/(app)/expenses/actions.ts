@@ -4,7 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAuth, requirePermission } from "@/server/authz";
-import { createExpense, decideExpense } from "@/server/services/expense";
+import {
+  createExpense,
+  decideExpense,
+  submitDraftExpense,
+  markExpenseReimbursed,
+  attachReceipt,
+} from "@/server/services/expense";
 
 const createSchema = z.object({
   projectId: z.string().optional(),
@@ -56,4 +62,35 @@ export async function decideExpenseAction(locale: string, formData: FormData): P
   });
 
   revalidatePath(`/${locale}/expenses`);
+  revalidatePath(`/${locale}/expenses/${parsed.data.id}`);
+}
+
+export async function submitExpenseAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "expense:record");
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await submitDraftExpense(ctx, id);
+  revalidatePath(`/${locale}/expenses`);
+  revalidatePath(`/${locale}/expenses/${id}`);
+}
+
+export async function markReimbursedAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "expense:approve");
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await markExpenseReimbursed(ctx, id);
+  revalidatePath(`/${locale}/expenses`);
+  revalidatePath(`/${locale}/expenses/${id}`);
+}
+
+export async function uploadReceiptAction(locale: string, formData: FormData): Promise<void> {
+  const ctx = await requireAuth(locale);
+  requirePermission(ctx, "expense:record");
+  const id = String(formData.get("id") ?? "");
+  const file = formData.get("receipt");
+  if (!id || !(file instanceof File) || file.size === 0) return;
+  await attachReceipt(ctx, id, file);
+  revalidatePath(`/${locale}/expenses/${id}`);
 }
