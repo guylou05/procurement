@@ -48,7 +48,8 @@
       "projects": "Projects",
       "checkIn": "Check In",
       "report": "Report",
-      "more": "More"
+      "more": "More",
+      "close": "Close"
     },
     "signOut": "Sign out",
     "payroll": "Payroll"

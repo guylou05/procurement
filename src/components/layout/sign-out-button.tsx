@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function SignOutButton() {
+export function SignOutButton({ labelled = false }: { labelled?: boolean }) {
   const t = useTranslations("nav");
   const locale = useLocale();
 
@@ -15,6 +15,15 @@ export function SignOutButton() {
     // production. window.location.origin is always the host the user is really on.
     const callbackUrl = `${window.location.origin}/${locale}/login`;
     void signOut({ callbackUrl });
+  }
+
+  if (labelled) {
+    return (
+      <Button variant="outline" className="w-full justify-start gap-3" onClick={handleSignOut}>
+        <LogOut className="size-4" />
+        {t("signOut")}
+      </Button>
+    );
   }
 
   return (
