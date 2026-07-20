@@ -719,7 +719,20 @@
     "phone": "Phone",
     "whatsapp": "WhatsApp",
     "projects": "Projects",
-    "empty": "No clients yet. Add clients to link them to projects and invoices."
+    "empty": "No clients yet. Add clients to link them to projects and invoices.",
+    "edit": "Edit client",
+    "save": "Save changes",
+    "profile": "Profile",
+    "billingAddress": "Billing address",
+    "notes": "Notes",
+    "totalInvoiced": "Total invoiced",
+    "totalPaid": "Total paid",
+    "outstanding": "Outstanding",
+    "invoices": "Invoices",
+    "noInvoices": "No invoices yet.",
+    "noProjects": "No projects yet.",
+    "paid": "paid",
+    "contact": "Contact"
   },
   "issue": {
     "title": "Issues",
