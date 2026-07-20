@@ -2,7 +2,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { requireAuth, can } from "@/server/authz";
 import { getMaterialHub } from "@/server/services/material";
-import { listProjects } from "@/server/services/project";
+import { listProjects, listAssignableUsers } from "@/server/services/project";
 import { Link } from "@/i18n/routing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,9 @@ export default async function MaterialHubPage({
   if (!data) notFound();
   const { material, currency, ledger, totalValueMinor, lowStock, usageByProject } = data;
   const canManage = can(ctx, "material:manage");
-  const projects = canManage ? await listProjects(ctx) : [];
+  const [projects, approvers] = canManage
+    ? await Promise.all([listProjects(ctx), listAssignableUsers(ctx)])
+    : [[], []];
   const record = recordTransactionAction.bind(null, locale);
 
   const kpis = [
@@ -96,7 +98,7 @@ export default async function MaterialHubPage({
             <CardTitle className="text-base">{th("recordMovement")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <form action={record} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+            <form action={record} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:items-end">
               <input type="hidden" name="materialId" value={material.id} />
               <div>
                 <Label htmlFor="type">{th("movementType")}</Label>
@@ -118,6 +120,10 @@ export default async function MaterialHubPage({
                 <Input id="quantity" name="quantity" type="number" min="0" step="any" required />
               </div>
               <div>
+                <Label htmlFor="counterparty">{th("counterparty")}</Label>
+                <Input id="counterparty" name="counterparty" />
+              </div>
+              <div>
                 <Label htmlFor="projectId">{th("project")}</Label>
                 <select
                   id="projectId"
@@ -133,8 +139,19 @@ export default async function MaterialHubPage({
                 </select>
               </div>
               <div>
-                <Label htmlFor="reason">{th("reason")}</Label>
-                <Input id="reason" name="reason" />
+                <Label htmlFor="approvedById">{th("approvedBy")}</Label>
+                <select
+                  id="approvedById"
+                  name="approvedById"
+                  className="flex h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+                >
+                  <option value="">{th("noApprover")}</option>
+                  {approvers.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <Button type="submit">{th("record")}</Button>
             </form>
@@ -158,6 +175,8 @@ export default async function MaterialHubPage({
                     <tr>
                       <th className="px-4 py-2 font-medium">{th("when")}</th>
                       <th className="px-4 py-2 font-medium">{t("transactionType")}</th>
+                      <th className="px-4 py-2 font-medium">{th("who")}</th>
+                      <th className="px-4 py-2 font-medium">{th("approved")}</th>
                       <th className="px-4 py-2 text-right font-medium">{th("change")}</th>
                       <th className="px-4 py-2 text-right font-medium">{th("balance")}</th>
                     </tr>
@@ -170,6 +189,21 @@ export default async function MaterialHubPage({
                           {tx.project ? ` · ${tx.project.name}` : ""}
                         </td>
                         <td className="px-4 py-2">{tty(tx.type)}</td>
+                        <td className="px-4 py-2 text-muted-foreground">
+                          {tx.counterparty ?? "—"}
+                          {tx.recordedByName ? (
+                            <span className="block text-xs">
+                              {th("recordedBy")}: {tx.recordedByName}
+                            </span>
+                          ) : null}
+                        </td>
+                        <td className="px-4 py-2">
+                          {tx.approvedByName ? (
+                            <Badge tone="success">{tx.approvedByName}</Badge>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </td>
                         <td className={`px-4 py-2 text-right font-medium ${tx.delta < 0 ? "text-destructive" : "text-success"}`}>
                           {tx.delta > 0 ? "+" : ""}
                           {tx.delta} {material.unit}

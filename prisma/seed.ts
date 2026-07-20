@@ -273,6 +273,7 @@ async function main() {
       data: {
         organizationId: org.id, materialId: material.id, type: "RECEIVE",
         quantity: 100, unit: m.unit, reason: "Réapprovisionnement", userId: pm.id,
+        counterparty: m.supplier, approvedById: owner.id, approvedAt: new Date(Date.now() - 6 * 864e5),
         createdAt: new Date(Date.now() - 6 * 864e5),
       },
     });
@@ -280,6 +281,7 @@ async function main() {
       data: {
         organizationId: org.id, materialId: material.id, projectId: residential.id, type: "ISSUE",
         quantity: 40, unit: m.unit, reason: "Sortie chantier", userId: foreman.id,
+        counterparty: "Kwame Mensah (chef de chantier)", approvedById: pm.id, approvedAt: new Date(Date.now() - 2 * 864e5),
         createdAt: new Date(Date.now() - 2 * 864e5),
       },
     });

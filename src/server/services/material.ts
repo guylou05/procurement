@@ -78,13 +78,28 @@ export async function getMaterialHub(ctx: TenantContext, id: string) {
     include: { project: { select: { id: true, name: true } } },
   });
 
+  // Resolve who recorded / approved each movement (userId + approvedById are scalars).
+  const personIds = [
+    ...new Set(txns.flatMap((tx) => [tx.userId, tx.approvedById].filter(Boolean) as string[])),
+  ];
+  const people = personIds.length
+    ? await prisma.user.findMany({ where: { id: { in: personIds } }, select: { id: true, name: true, email: true } })
+    : [];
+  const personName = new Map(people.map((p) => [p.id, p.name ?? p.email]));
+
   // Annotate each txn (newest→oldest) with balanceAfter, walking back from current qty.
   let running = material.quantity;
   const ledger = txns.map((tx) => {
     const delta = isIncreasing(tx.type) ? Math.abs(tx.quantity) : -Math.abs(tx.quantity);
     const balanceAfter = running;
     running -= delta;
-    return { ...tx, delta, balanceAfter };
+    return {
+      ...tx,
+      delta,
+      balanceAfter,
+      recordedByName: tx.userId ? personName.get(tx.userId) ?? null : null,
+      approvedByName: tx.approvedById ? personName.get(tx.approvedById) ?? null : null,
+    };
   });
 
   const usageByProject = new Map<string, { name: string; qty: number }>();
@@ -149,6 +164,8 @@ export async function recordTransaction(
     quantity: number;
     projectId?: string;
     reason?: string;
+    counterparty?: string;
+    approvedById?: string;
   },
 ) {
   const material = await prisma.material.findFirst({
@@ -156,6 +173,15 @@ export async function recordTransaction(
     select: { id: true, unit: true },
   });
   if (!material) throw new Error("Material not found in organization");
+
+  // If an approver is named, ensure they belong to this org.
+  if (input.approvedById) {
+    const member = await prisma.organizationMember.findUnique({
+      where: { organizationId_userId: { organizationId: ctx.organizationId, userId: input.approvedById } },
+      select: { userId: true },
+    });
+    if (!member) throw new Error("Approver is not a member of this organization");
+  }
 
   const delta = INCREASING.includes(input.type)
     ? Math.abs(input.quantity)
@@ -172,6 +198,9 @@ export async function recordTransaction(
         unit: material.unit,
         reason: input.reason,
         userId: ctx.userId,
+        counterparty: input.counterparty?.trim() || null,
+        approvedById: input.approvedById || null,
+        approvedAt: input.approvedById ? new Date() : null,
       },
     }),
     prisma.material.update({
