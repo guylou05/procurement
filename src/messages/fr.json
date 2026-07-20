@@ -194,7 +194,18 @@
     "budgetVsActual": "Budget vs réel",
     "recentActivity": "Activité récente",
     "projectsBehind": "Projets en retard",
-    "maintenanceDue": "Maintenance d'équipement à prévoir"
+    "maintenanceDue": "Maintenance d'équipement à prévoir",
+    "spendThisMonth": "Dépenses ce mois-ci",
+    "vsLastMonth": "vs {amount} le mois dernier",
+    "awaitingReimbursement": "En attente de remboursement",
+    "inventoryValue": "Valeur du stock",
+    "spendTrend": "Dépenses",
+    "attendanceTrend": "Présence",
+    "last8Weeks": "8 dernières semaines",
+    "spendByCategory": "Dépenses par catégorie",
+    "noData": "Aucune donnée",
+    "viewAll": "Voir tout",
+    "noProject": "Aucun projet"
   },
   "project": {
     "title": "Projets",
