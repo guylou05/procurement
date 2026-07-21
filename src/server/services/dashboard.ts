@@ -1,4 +1,4 @@
-import type { ExpenseStatus } from "@prisma/client";
+import type { ExpenseStatus, TaskStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { TenantContext } from "@/server/tenant";
 import { projectStats } from "@/server/services/project";
@@ -36,6 +36,38 @@ export async function getDashboardData(ctx: TenantContext) {
     console.error("[getDashboardData] failed:", err);
     throw err;
   }
+}
+
+/** The signed-in user's own open work: assigned tasks that aren't done, newest first. */
+export async function getMyWork(ctx: TenantContext) {
+  const openStatuses: TaskStatus[] = ["TODO", "IN_PROGRESS", "BLOCKED", "AWAITING_REVIEW"];
+  const [tasks, openCount] = await Promise.all([
+    prisma.task.findMany({
+      where: {
+        organizationId: ctx.organizationId,
+        assigneeId: ctx.userId,
+        status: { in: openStatuses },
+      },
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        priority: true,
+        dueDate: true,
+        project: { select: { name: true } },
+      },
+      orderBy: [{ dueDate: { sort: "asc", nulls: "last" } }, { createdAt: "desc" }],
+      take: 6,
+    }),
+    prisma.task.count({
+      where: {
+        organizationId: ctx.organizationId,
+        assigneeId: ctx.userId,
+        status: { in: openStatuses },
+      },
+    }),
+  ]);
+  return { tasks, openCount };
 }
 
 const startOfUTCMonth = (year: number, month: number) => new Date(Date.UTC(year, month, 1));

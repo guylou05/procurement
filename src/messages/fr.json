@@ -206,7 +206,9 @@
     "spendByCategory": "Dépenses par catégorie",
     "noData": "Aucune donnée",
     "viewAll": "Voir tout",
-    "noProject": "Aucun projet"
+    "noProject": "Aucun projet",
+    "myTasks": "Mes tâches",
+    "noMyTasks": "Vous n’avez aucune tâche en cours"
   },
   "project": {
     "title": "Projets",
