@@ -7,13 +7,44 @@ import { uploadAttachment } from "@/server/services/attachment";
 
 /** Expense service — tenant-scoped, with configurable approval thresholds and audit. */
 
-export async function listExpenses(ctx: TenantContext) {
+export async function listExpenses(
+  ctx: TenantContext,
+  filters?: { projectId?: string; categoryId?: string; from?: Date; status?: ExpenseStatus },
+) {
   return prisma.expense.findMany({
-    where: { organizationId: ctx.organizationId },
-    include: { project: { select: { name: true } } },
+    where: {
+      organizationId: ctx.organizationId,
+      ...(filters?.projectId ? { projectId: filters.projectId } : {}),
+      ...(filters?.categoryId ? { categoryId: filters.categoryId } : {}),
+      ...(filters?.status ? { status: filters.status } : {}),
+      ...(filters?.from ? { date: { gte: filters.from } } : {}),
+    },
+    include: { project: { select: { name: true } }, category: { select: { name: true } } },
     orderBy: { date: "desc" },
     take: 100,
   });
+}
+
+/** Resolves a project or category name for a drill-down filter banner. */
+export async function resolveFilterLabels(
+  ctx: TenantContext,
+  filters: { projectId?: string; categoryId?: string },
+) {
+  const [project, category] = await Promise.all([
+    filters.projectId
+      ? prisma.project.findFirst({
+          where: { id: filters.projectId, organizationId: ctx.organizationId },
+          select: { name: true },
+        })
+      : Promise.resolve(null),
+    filters.categoryId
+      ? prisma.expenseCategory.findFirst({
+          where: { id: filters.categoryId, organizationId: ctx.organizationId },
+          select: { name: true },
+        })
+      : Promise.resolve(null),
+  ]);
+  return { projectName: project?.name ?? null, categoryName: category?.name ?? null };
 }
 
 export async function createExpense(
