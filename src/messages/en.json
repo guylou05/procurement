@@ -206,7 +206,9 @@
     "spendByCategory": "Spend by category",
     "noData": "No data yet",
     "viewAll": "View all",
-    "noProject": "No project"
+    "noProject": "No project",
+    "myTasks": "My tasks",
+    "noMyTasks": "You have no open tasks"
   },
   "project": {
     "title": "Projects",
