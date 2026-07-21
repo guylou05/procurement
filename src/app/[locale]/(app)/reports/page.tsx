@@ -6,22 +6,40 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { TrendChart } from "@/components/charts/trend-chart";
 import { BarList } from "@/components/charts/bar-list";
+import { Link } from "@/i18n/routing";
 import { formatMoney } from "@/lib/money";
 import { Download, UserCheck, Receipt, Package } from "lucide-react";
 
+// Period presets, each mapped to a number of weekly buckets.
+const RANGES = [
+  { key: "30d", weeks: 5 },
+  { key: "90d", weeks: 13 },
+  { key: "6m", weeks: 26 },
+  { key: "12m", weeks: 52 },
+] as const;
+const DEFAULT_RANGE = "90d";
+
 export default async function ReportsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ range?: string }>;
 }) {
   const { locale } = await params;
+  const { range } = await searchParams;
   setRequestLocale(locale);
   const ctx = await requireAuth(locale);
   const t = await getTranslations("report");
-  const [s, analytics] = await Promise.all([reportSummary(ctx), getTenantAnalytics(ctx, 8)]);
+
+  const active = RANGES.find((r) => r.key === range) ?? RANGES.find((r) => r.key === DEFAULT_RANGE)!;
+  const [s, analytics] = await Promise.all([reportSummary(ctx), getTenantAnalytics(ctx, active.weeks)]);
   const cur = ctx.organization.currency;
   const canExport = can(ctx, "report:export");
   const money = (n: number) => formatMoney(n, cur, locale);
+  const rangeLabel = t(`ranges.${active.key}`);
+  // yyyy-mm-dd start of the window, threaded into drill-down links as `from`.
+  const fromParam = analytics.since.toISOString().slice(0, 10);
 
   const stats = [
     { label: t("presentToday"), value: String(s.presentToday) },
@@ -61,16 +79,31 @@ export default async function ReportsPage({
 
       {/* Analytics */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">
-          {t("analytics")} <span className="text-sm font-normal text-muted-foreground">· {t("last8Weeks")}</span>
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold">
+            {t("analytics")} <span className="text-sm font-normal text-muted-foreground">· {rangeLabel}</span>
+          </h2>
+          <div className="flex rounded-md border p-0.5">
+            {RANGES.map((r) => (
+              <Link
+                key={r.key}
+                href={`/reports?range=${r.key}`}
+                className={`rounded px-2.5 py-1 text-sm ${
+                  r.key === active.key ? "bg-muted font-medium" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t(`ranges.${r.key}`)}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <TrendChart data={analytics.spendTrend} title={t("spendTrend")} subtitle={t("last8Weeks")} format={money} />
+          <TrendChart data={analytics.spendTrend} title={t("spendTrend")} subtitle={rangeLabel} format={money} />
           <TrendChart
             data={analytics.attendanceTrend}
             title={t("attendanceTrend")}
-            subtitle={t("last8Weeks")}
+            subtitle={rangeLabel}
             accent="hsl(var(--accent))"
           />
         </div>
@@ -89,6 +122,7 @@ export default async function ReportsPage({
                     label: c.name,
                     value: c.minor,
                     display: money(c.minor),
+                    href: c.id ? `/expenses?category=${c.id}&from=${fromParam}` : undefined,
                   }))}
                 />
               )}
@@ -107,6 +141,7 @@ export default async function ReportsPage({
                     label: p.name,
                     value: p.minor,
                     display: money(p.minor),
+                    href: `/expenses?project=${p.id}&from=${fromParam}`,
                   }))}
                 />
               )}

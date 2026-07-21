@@ -60,9 +60,14 @@ export async function getTenantAnalytics(ctx: TenantContext, weeks = 8) {
   since.setUTCDate(since.getUTCDate() - weeks * 7);
 
   const [expenses, attendance, projects] = await Promise.all([
+    // Everything is windowed to the selected period so the whole view — trends,
+    // category/project breakdowns and budget-vs-actual — reflects the same range.
     prisma.expense.findMany({
-      where: { organizationId: org, status: "APPROVED" },
-      include: { category: { select: { name: true } }, project: { select: { id: true, name: true } } },
+      where: { organizationId: org, status: "APPROVED", date: { gte: since } },
+      include: {
+        category: { select: { id: true, name: true } },
+        project: { select: { id: true, name: true } },
+      },
     }),
     prisma.attendanceRecord.findMany({
       where: {
@@ -78,18 +83,19 @@ export async function getTenantAnalytics(ctx: TenantContext, weeks = 8) {
     }),
   ]);
 
-  const recentExpenses = expenses.filter((e) => e.date >= since);
-  const spendTrend = bucketBy(recentExpenses, (e) => e.date, (e) => e.amountMinor, weeks);
+  const spendTrend = bucketBy(expenses, (e) => e.date, (e) => e.amountMinor, weeks);
   const attendanceTrend = bucketBy(attendance, (a) => a.date, () => 1, weeks);
 
-  const byCategory = new Map<string, number>();
-  const byProject = new Map<string, { name: string; minor: number }>();
+  const byCategory = new Map<string, { id: string | null; name: string; minor: number }>();
+  const byProject = new Map<string, { id: string; name: string; minor: number }>();
   const spentByProjectId = new Map<string, number>();
   for (const e of expenses) {
-    const cat = e.category?.name ?? "Uncategorized";
-    byCategory.set(cat, (byCategory.get(cat) ?? 0) + e.amountMinor);
+    const catId = e.category?.id ?? "none";
+    const cat = byCategory.get(catId) ?? { id: e.category?.id ?? null, name: e.category?.name ?? "Uncategorized", minor: 0 };
+    cat.minor += e.amountMinor;
+    byCategory.set(catId, cat);
     if (e.project) {
-      const cur = byProject.get(e.project.id) ?? { name: e.project.name, minor: 0 };
+      const cur = byProject.get(e.project.id) ?? { id: e.project.id, name: e.project.name, minor: 0 };
       cur.minor += e.amountMinor;
       byProject.set(e.project.id, cur);
       spentByProjectId.set(e.project.id, (spentByProjectId.get(e.project.id) ?? 0) + e.amountMinor);
@@ -99,11 +105,10 @@ export async function getTenantAnalytics(ctx: TenantContext, weeks = 8) {
   const currency = ctx.organization.currency;
   return {
     currency,
+    since,
     spendTrend,
     attendanceTrend,
-    expensesByCategory: Array.from(byCategory.entries())
-      .map(([name, minor]) => ({ name, minor }))
-      .sort((a, b) => b.minor - a.minor),
+    expensesByCategory: Array.from(byCategory.values()).sort((a, b) => b.minor - a.minor),
     expensesByProject: Array.from(byProject.values()).sort((a, b) => b.minor - a.minor),
     budgetVsActual: projects
       .map((p) => ({

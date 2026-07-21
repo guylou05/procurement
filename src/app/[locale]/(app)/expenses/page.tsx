@@ -1,6 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { requireAuth, can } from "@/server/authz";
-import { listExpenses } from "@/server/services/expense";
+import { listExpenses, resolveFilterLabels } from "@/server/services/expense";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,16 +13,25 @@ import { decideExpenseAction } from "./actions";
 
 export default async function ExpensesPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ project?: string; category?: string; from?: string }>;
 }) {
   const { locale } = await params;
+  const { project, category, from } = await searchParams;
   setRequestLocale(locale);
   const ctx = await requireAuth(locale);
   const t = await getTranslations("expense");
   const ts = await getTranslations("expense.statuses");
   const tm = await getTranslations("expense.methods");
-  const expenses = await listExpenses(ctx);
+
+  const fromDate = from && !Number.isNaN(Date.parse(from)) ? new Date(from) : undefined;
+  const hasFilter = Boolean(project || category || fromDate);
+  const [expenses, labels] = await Promise.all([
+    listExpenses(ctx, { projectId: project, categoryId: category, from: fromDate }),
+    project || category ? resolveFilterLabels(ctx, { projectId: project, categoryId: category }) : Promise.resolve({ projectName: null, categoryName: null }),
+  ]);
   const decide = decideExpenseAction.bind(null, locale);
   const canApprove = can(ctx, "expense:approve");
 
@@ -40,8 +49,25 @@ export default async function ExpensesPage({
         ) : null}
       </div>
 
+      {hasFilter ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm">
+          <span className="text-muted-foreground">{t("filtered")}:</span>
+          {labels.projectName ? <span className="font-medium">{labels.projectName}</span> : null}
+          {labels.categoryName ? <span className="font-medium">{labels.categoryName}</span> : null}
+          {fromDate ? (
+            <span className="text-muted-foreground">
+              {t("since")} {formatDate(fromDate, locale)}
+            </span>
+          ) : null}
+          <Link href="/expenses" className="ml-auto inline-flex items-center gap-1 text-primary hover:underline">
+            <X className="size-3.5" />
+            {t("clearFilter")}
+          </Link>
+        </div>
+      ) : null}
+
       {expenses.length === 0 ? (
-        <EmptyState title={t("empty")} />
+        <EmptyState title={hasFilter ? t("noneMatch") : t("empty")} />
       ) : (
         <Card className="overflow-hidden">
           <div className="overflow-x-auto">

@@ -495,7 +495,13 @@
     "noData": "Aucune donnée pour le moment.",
     "budget": "Budget",
     "spent": "Dépensé",
-    "exportsTitle": "Exports"
+    "exportsTitle": "Exports",
+    "ranges": {
+      "30d": "30 jours",
+      "90d": "90 jours",
+      "6m": "6 mois",
+      "12m": "12 mois"
+    }
   },
   "worker": {
     "title": "Ouvriers",
@@ -675,7 +681,11 @@
     "rejectedReason": "Motif du rejet",
     "viewReceipt": "Voir le reçu",
     "back": "Dépenses",
-    "status": "Statut"
+    "status": "Statut",
+    "filtered": "Filtré",
+    "since": "depuis",
+    "clearFilter": "Effacer",
+    "noneMatch": "Aucune dépense ne correspond à ce filtre"
   },
   "equipment": {
     "title": "Équipements",
