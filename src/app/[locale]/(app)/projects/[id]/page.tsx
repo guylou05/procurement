@@ -1,13 +1,21 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { requireAuth, can } from "@/server/authz";
-import { getProjectHub, getProjectBudget, listAssignableUsers } from "@/server/services/project";
+import {
+  getProjectHub,
+  getProjectBudget,
+  getProjectAnalytics,
+  listAssignableUsers,
+} from "@/server/services/project";
 import { Link } from "@/i18n/routing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { EmptyState } from "@/components/shared/empty-state";
+import { TrendChart } from "@/components/charts/trend-chart";
+import { BarList } from "@/components/charts/bar-list";
 import { formatMoney } from "@/lib/money";
 import { formatDate } from "@/lib/utils";
 import {
@@ -38,18 +46,22 @@ export default async function ProjectHubPage({
   const ctx = await requireAuth(locale);
   const t = await getTranslations("project");
   const th = await getTranslations("project.hub");
+  const ta = await getTranslations("project.analytics");
   const tp = await getTranslations("project.statuses");
+  const tts = await getTranslations("task.statuses");
   const tsev = await getTranslations("issue.severities");
   const tds = await getTranslations("dailyReport.statuses");
 
-  const [hub, budget, assignable] = await Promise.all([
+  const [hub, budget, analytics, assignable] = await Promise.all([
     getProjectHub(ctx, id),
     getProjectBudget(ctx, id),
+    getProjectAnalytics(ctx, id),
     listAssignableUsers(ctx),
   ]);
-  if (!hub || !budget) notFound();
+  if (!hub || !budget || !analytics) notFound();
   const { project, recent, counts } = hub;
   const cur = budget.currency;
+  const money = (n: number) => formatMoney(n, cur, locale);
   const canManage = can(ctx, "project:create");
   const canAssign = can(ctx, "project:assign");
   const over = budget.remainingMinor < 0;
@@ -236,6 +248,48 @@ export default async function ProjectHubPage({
                 </Button>
               </form>
             ) : null}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Analytics */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">
+          {ta("title")} <span className="text-sm font-normal text-muted-foreground">· {ta("last8Weeks")}</span>
+        </h2>
+        <div className="grid gap-4 lg:grid-cols-3">
+          <TrendChart data={analytics.spendTrend} title={ta("weeklySpend")} subtitle={ta("last8Weeks")} format={money} />
+          <TrendChart
+            data={analytics.spendCumulative}
+            title={ta("cumulativeSpend")}
+            subtitle={analytics.budgetMinor > 0 ? ta("ofBudget", { amount: money(analytics.budgetMinor) }) : ta("last8Weeks")}
+            format={money}
+            total={analytics.spendCumulative.at(-1)?.value ?? 0}
+            accent="hsl(var(--warning))"
+          />
+          <TrendChart
+            data={analytics.laborTrend}
+            title={ta("labor")}
+            subtitle={ta("last8Weeks")}
+            accent="hsl(var(--accent))"
+          />
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{ta("taskBreakdown")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {analytics.taskDistribution.length === 0 ? (
+              <EmptyState title={ta("noTasks")} />
+            ) : (
+              <BarList
+                items={analytics.taskDistribution.map((s) => ({
+                  label: tts(s.status),
+                  value: s.count,
+                  display: `${s.count} · ${Math.round((s.count / analytics.taskTotal) * 100)}%`,
+                }))}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
