@@ -271,7 +271,17 @@
       "HIGH": "Haute",
       "URGENT": "Urgente"
     },
-    "empty": "Aucun projet pour le moment. Créez votre premier projet pour commencer."
+    "empty": "Aucun projet pour le moment. Créez votre premier projet pour commencer.",
+    "analytics": {
+      "title": "Analytique",
+      "last8Weeks": "8 dernières semaines",
+      "weeklySpend": "Dépenses hebdomadaires",
+      "cumulativeSpend": "Dépenses cumulées",
+      "ofBudget": "sur {amount} de budget",
+      "labor": "Jours de main-d’œuvre",
+      "taskBreakdown": "Répartition des tâches",
+      "noTasks": "Aucune tâche"
+    }
   },
   "dailyReport": {
     "title": "Rapport journalier de chantier",

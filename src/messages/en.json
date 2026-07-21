@@ -271,7 +271,17 @@
       "HIGH": "High",
       "URGENT": "Urgent"
     },
-    "empty": "No projects yet. Create your first project to get started."
+    "empty": "No projects yet. Create your first project to get started.",
+    "analytics": {
+      "title": "Analytics",
+      "last8Weeks": "Last 8 weeks",
+      "weeklySpend": "Weekly spend",
+      "cumulativeSpend": "Cumulative spend",
+      "ofBudget": "of {amount} budget",
+      "labor": "Labor days",
+      "taskBreakdown": "Task breakdown",
+      "noTasks": "No tasks yet"
+    }
   },
   "dailyReport": {
     "title": "Daily Site Report",

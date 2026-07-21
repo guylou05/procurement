@@ -11,6 +11,7 @@ export function TrendChart({
   subtitle,
   accent = "hsl(var(--primary))",
   format,
+  total: totalOverride,
 }: {
   data: TrendPoint[];
   title: string;
@@ -18,13 +19,18 @@ export function TrendChart({
   accent?: string;
   /** Formats the header total (e.g. as currency). Defaults to a plain number. */
   format?: (n: number) => string;
+  /**
+   * Overrides the header figure. Defaults to the sum of all points, which is right
+   * for per-period series; pass the last value for a cumulative/running-total series.
+   */
+  total?: number;
 }) {
   const width = 320;
   const height = 90;
   const pad = 4;
   const values = data.map((d) => d.value);
   const max = Math.max(1, ...values);
-  const totalValue = values.reduce((a, b) => a + b, 0);
+  const totalValue = totalOverride ?? values.reduce((a, b) => a + b, 0);
   const total = format ? format(totalValue) : String(totalValue);
   const last = values[values.length - 1] ?? 0;
 

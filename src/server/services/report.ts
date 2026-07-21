@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import type { TenantContext } from "@/server/tenant";
 import { isLowStock } from "@/server/services/material";
 import { toMajor } from "@/lib/money";
+import { bucketBy, type TrendPoint } from "@/server/services/trend";
+
+export type { TrendPoint };
 
 /** Reporting & export service — tenant-scoped read models. */
 
@@ -44,43 +47,6 @@ export async function reportSummary(ctx: TenantContext) {
     lowStockItems: lowStock,
     inventoryValueMinor,
   };
-}
-
-export interface TrendPoint {
-  label: string;
-  value: number;
-}
-
-function startOfWeek(d: Date): Date {
-  const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  const day = (x.getUTCDay() + 6) % 7;
-  x.setUTCDate(x.getUTCDate() - day);
-  return x;
-}
-
-function weeklyBuckets(weeks: number): { start: number; label: string; value: number }[] {
-  const thisWeek = startOfWeek(new Date());
-  const buckets: { start: number; label: string; value: number }[] = [];
-  for (let i = weeks - 1; i >= 0; i--) {
-    const start = new Date(thisWeek);
-    start.setUTCDate(start.getUTCDate() - i * 7);
-    buckets.push({
-      start: start.getTime(),
-      label: start.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }),
-      value: 0,
-    });
-  }
-  return buckets;
-}
-
-function bucketBy<T>(rows: T[], date: (r: T) => Date, amount: (r: T) => number, weeks: number): TrendPoint[] {
-  const buckets = weeklyBuckets(weeks);
-  for (const r of rows) {
-    const ws = startOfWeek(date(r)).getTime();
-    const b = buckets.find((x) => x.start === ws);
-    if (b) b.value += amount(r);
-  }
-  return buckets.map((b) => ({ label: b.label, value: b.value }));
 }
 
 /**

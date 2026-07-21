@@ -1,8 +1,9 @@
-import type { ProjectStatus } from "@prisma/client";
+import type { ProjectStatus, TaskStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { TenantContext } from "@/server/tenant";
 import { toMinor } from "@/lib/money";
 import { recordAudit } from "@/server/audit";
+import { bucketBy, cumulative } from "@/server/services/trend";
 
 /**
  * Project service. Every function is tenant-scoped: all queries filter by
@@ -173,6 +174,95 @@ export async function getProjectBudget(ctx: TenantContext, id: string) {
     remainingMinor: project.budgetMinor - spentMinor,
     varianceMinor: project.budgetMinor - spentMinor,
     breakdown,
+  };
+}
+
+/**
+ * Time-series analytics for a single project: weekly spend, a cumulative
+ * spend burn-down against budget, weekly labor (attendance) and a task-status
+ * distribution. All tenant-scoped and bucketed in JS via the trend helpers.
+ */
+export async function getProjectAnalytics(ctx: TenantContext, id: string, weeks = 8) {
+  const project = await prisma.project.findFirst({
+    where: { id, organizationId: ctx.organizationId, deletedAt: null },
+    select: { budgetMinor: true, currency: true },
+  });
+  if (!project) return null;
+  const currency = project.currency ?? ctx.organization.currency;
+
+  const since = new Date();
+  since.setUTCDate(since.getUTCDate() - weeks * 7);
+
+  const [expenses, materialTxns, attendance, tasksByStatus] = await Promise.all([
+    prisma.expense.findMany({
+      where: {
+        projectId: id,
+        organizationId: ctx.organizationId,
+        status: { in: ["APPROVED", "REIMBURSED"] },
+        date: { gte: since },
+      },
+      select: { amountMinor: true, date: true },
+    }),
+    prisma.materialTransaction.findMany({
+      where: {
+        projectId: id,
+        organizationId: ctx.organizationId,
+        type: { in: ["ISSUE", "USE"] },
+        createdAt: { gte: since },
+      },
+      select: { quantity: true, createdAt: true, material: { select: { unitCostMinor: true } } },
+    }),
+    prisma.attendanceRecord.findMany({
+      where: {
+        projectId: id,
+        organizationId: ctx.organizationId,
+        date: { gte: since },
+        status: { in: ["PRESENT", "LATE", "OVERTIME", "HALF_DAY"] },
+      },
+      select: { date: true },
+    }),
+    prisma.task.groupBy({
+      by: ["status"],
+      where: { projectId: id, organizationId: ctx.organizationId },
+      _count: { _all: true },
+    }),
+  ]);
+
+  // Spend mirrors the budget-vs-actual definition: approved/reimbursed expenses
+  // plus the cost of materials issued or used on the project.
+  const spendRows = [
+    ...expenses.map((e) => ({ date: e.date, minor: e.amountMinor })),
+    ...materialTxns.map((tx) => ({
+      date: tx.createdAt,
+      minor: Math.round(tx.quantity * (tx.material?.unitCostMinor ?? 0)),
+    })),
+  ];
+  const spendTrend = bucketBy(spendRows, (r) => r.date, (r) => r.minor, weeks);
+  const spendCumulative = cumulative(spendTrend);
+  const laborTrend = bucketBy(attendance, (a) => a.date, () => 1, weeks);
+
+  const statusOrder: TaskStatus[] = [
+    "TODO",
+    "IN_PROGRESS",
+    "BLOCKED",
+    "AWAITING_REVIEW",
+    "COMPLETED",
+    "CANCELLED",
+  ];
+  const countByStatus = new Map(tasksByStatus.map((t) => [t.status, t._count._all]));
+  const taskDistribution = statusOrder
+    .map((status) => ({ status, count: countByStatus.get(status) ?? 0 }))
+    .filter((s) => s.count > 0);
+  const taskTotal = taskDistribution.reduce((a, b) => a + b.count, 0);
+
+  return {
+    currency,
+    budgetMinor: project.budgetMinor,
+    spendTrend,
+    spendCumulative,
+    laborTrend,
+    taskDistribution,
+    taskTotal,
   };
 }
 
